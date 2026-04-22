@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Délais de traitement — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-brand"><div class="nom-site">L'assurance Maladie</div><div class="sous-titre">Votre espace personnel en ligne</div></div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html" class="active">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main>
+  <div class="breadcrumb"><a href="demarches.html">← Retour aux démarches</a></div>
+
+  <div id="vue-form">
+    <h1>Délais de traitement de ma caisse</h1>
+    <div class="champ-groupe" style="margin-top:16px;">
+      <label class="champ-label">Thématique de votre demande</label>
+      <select class="champ-select" style="width:240px;">
+        <option>Sélectionner</option>
+        <option>Remboursement des soins</option>
+        <option>Changement de caisse</option>
+        <option>Attestation de droits</option>
+        <option>CEAM</option>
+      </select>
+    </div>
+    <div class="champ-groupe">
+      <label class="champ-label">Date de dépôt de votre demande</label>
+      <input type="date" class="champ-input" value="2026-04-08">
+    </div>
+    <button class="btn-primaire" onclick="afficherResultats()">Valider</button>
+  </div>
+
+  <div id="vue-resultats" style="display:none;">
+    <div class="breadcrumb"><a href="#" onclick="retourForm(); return false;">← Modifier ma demande</a></div>
+    <h1>Délais de traitement de ma caisse</h1>
+
+    <div class="resultat-delais" style="margin-top:16px;">
+      <p>Si vous avez effectué votre démarche <strong>sur le compte ameli</strong>, la date estimée est le :
+        <span class="resultat-date">13/04/2026</span>
+      </p>
+      <p>Si vous avez effectué votre démarche <strong>en caisse ou par courrier</strong>, la date estimée est le :
+        <span class="resultat-date">04/05/2026</span>
+      </p>
+    </div>
+
+    <button class="btn-secondaire" onclick="retourForm()" style="margin-top:8px;">Faire une nouvelle recherche</button>
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> – <a href="#">Mentions légales</a> – <a href="#">Accessibilité</a> – <a href="#">Site d'Assurance Maladie</a>
+</footer>
+<script>
+  function afficherResultats() { document.getElementById('vue-form').style.display='none'; document.getElementById('vue-resultats').style.display='block'; window.scrollTo(0,0); }
+  function retourForm() { document.getElementById('vue-resultats').style.display='none'; document.getElementById('vue-form').style.display='block'; window.scrollTo(0,0); }
+  document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });
+</script>
+</body>
+</html>

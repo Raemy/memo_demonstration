@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assurance Maladie — Services</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="header">
+  <span class="header-brand">Assurance Maladie</span>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</div>
+<nav class="nav">
+  <a href="index.html">Accueil</a><span class="nav-sep">|</span>
+  <a href="services.html" class="active">Plan de santé</a><span class="nav-sep">|</span>
+  <a href="services.html">Service</a><span class="nav-sep">|</span>
+  <a href="demarches.html">Démarche</a><span class="nav-sep">|</span>
+  <a href="documents.html">Documents</a><span class="nav-sep">|</span>
+  <a href="compte.html">Compte</a><span class="nav-sep">|</span>
+  <a href="#">Aide</a><span class="nav-sep">|</span>
+  <a href="#">Contact</a><span class="nav-sep">|</span>
+  <a href="#">FAQ</a><span class="nav-sep">|</span>
+  <a href="cgu.html">Mentions Légales</a>
+</nav>
+<main>
+  <div class="layout-sidebar">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-titre">Services disponibles en ligne</div>
+        <ul>
+          <li><a href="remboursements.html">Consulter mes remboursements de soins médicaux, pharmaceutiques, hospitaliers, dentaires, optique et autres prestations de santé sur les 24 derniers mois avec possibilité de télécharger les justificatifs</a></li>
+          <li><a href="remboursements.html">Relevés mensuels</a></li>
+          <li><a href="#">Relevé annuel</a></li>
+          <li><a href="#">Participations forfaitaires</a></li>
+          <li><a href="delais.html">Créance</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="contenu-principal">
+      <div class="col2">
+        <div class="liste-demarches">
+          <p>Consulter mes remboursements de soins médicaux, pharmaceutiques, hospitaliers, dentaires, optique et autres prestations de santé sur les 24 derniers mois avec possibilité de télécharger les justificatifs</p>
+          <p>Demander le remboursement d'une dépense de santé non prise en charge automatiquement par télétransmission en joignant les justificatifs scannés au format PDF</p>
+          <p>Déclarer un changement de situation familiale ou professionnelle ayant un impact sur mes droits et mes cotisations avec les documents justificatifs à fournir</p>
+        </div>
+        <div class="liste-demarches">
+          <p>Télécharger mon attestation de droits et de couverture sociale valable pour l'année en cours avec QR code de vérification intégré pour transmission aux professionnels de santé</p>
+          <p>Modifier mes informations personnelles et coordonnées bancaires pour mes virements de remboursement avec délai de prise en charge de 10 jours ouvrés</p>
+          <p>Prendre rendez-vous dans une agence pour un entretien personnalisé sur mes droits ou pour déposer un dossier complexe nécessitant un accompagnement</p>
+        </div>
+      </div>
+      <button class="btn-secondaire" onclick="window.history.back()">Retour</button>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">N° sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Mentions légales</a> <a href="cgu.html">CGU</a> Protection des données<br>
+  © 2026 Administration Française – Version 3.2.1 build 20260315-1847
+</footer>
+<script>document.getElementById('btnDeco').addEventListener('click', () => window.location.href='index.html');</script>
+</body>
+</html>

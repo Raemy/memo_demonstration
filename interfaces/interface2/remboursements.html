@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frais de santé — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <div class="nom-site">L'assurance Maladie</div>
+    <div class="sous-titre">Votre espace personnel en ligne</div>
+  </div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html" class="active">Frais de santé</a>
+  <a href="demarches.html">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<main>
+  <!-- Vue filtre -->
+  <div id="vue-filtre">
+    <h1>Frais de santé</h1>
+    <div class="barre-filtre" style="margin-top:16px;">
+      <div class="champ-groupe">
+        <label class="champ-label">Période du</label>
+        <input type="date" class="champ-input" value="2025-10-08">
+      </div>
+      <div class="champ-groupe">
+        <label class="champ-label">Au</label>
+        <input type="date" class="champ-input" value="2026-04-08">
+      </div>
+      <div class="champ-groupe">
+        <label class="champ-label">Type</label>
+        <select class="champ-select">
+          <option>Remboursement des soins</option>
+          <option>Tous</option>
+          <option>Pharmacie</option>
+        </select>
+      </div>
+      <button class="btn-primaire" onclick="afficherResultats()">Rechercher</button>
+    </div>
+  </div>
+
+  <!-- Vue résultats -->
+  <div id="vue-resultats" style="display:none;">
+    <div class="breadcrumb" style="margin-bottom:16px;">
+      <a href="remboursements.html" onclick="retourFiltre(); return false;">← Retour aux démarches</a>
+    </div>
+    <h1>Frais de santé</h1>
+
+    <div class="section-titre-remb">Janvier 2026</div>
+
+    <div class="remb-ligne">
+      <div>
+        <div class="remb-date">07 jan.</div>
+      </div>
+      <div>
+        <div style="font-size:14px; color:#1e1e1e;">Consultation généraliste</div>
+        <div class="remb-base">Base de remboursement : 25,00 € — Taux : 70%</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="remb-statut">Remboursé</div>
+        <div class="remb-montant">17,50 €</div>
+      </div>
+    </div>
+
+    <div class="remb-ligne">
+      <div>
+        <div class="remb-date">15 jan.</div>
+      </div>
+      <div>
+        <div style="font-size:14px; color:#1e1e1e;">Spécialiste cardiologue</div>
+        <div class="remb-base">Base de remboursement : 30,00 € — Taux : 70%</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="remb-statut">Remboursé</div>
+        <div class="remb-montant">21,00 €</div>
+      </div>
+    </div>
+
+    <div class="remb-ligne">
+      <div>
+        <div class="remb-date">22 jan.</div>
+      </div>
+      <div>
+        <div style="font-size:14px; color:#1e1e1e;">Spécialiste ophtalmologue</div>
+        <div class="remb-base">Base de remboursement : 30,00 € — Taux : 70%</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="remb-statut">Remboursé</div>
+        <div class="remb-montant">21,00 €</div>
+      </div>
+    </div>
+
+    <div class="section-titre-remb">Décembre 2025</div>
+
+    <div class="remb-ligne">
+      <div>
+        <div class="remb-date">12 déc.</div>
+      </div>
+      <div>
+        <div style="font-size:14px; color:#1e1e1e;">Consultation généraliste</div>
+        <div class="remb-base">Base de remboursement : 25,00 € — Taux : 70%</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="remb-statut">Remboursé</div>
+        <div class="remb-montant">17,50 €</div>
+      </div>
+    </div>
+
+    <div style="margin-top:16px;">
+      <button class="btn-secondaire" onclick="retourFiltre()">Accéder à l'historique complet</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> –
+  <a href="#">Mentions légales</a> –
+  <a href="#">Accessibilité</a> –
+  <a href="#">Site d'Assurance Maladie</a>
+</footer>
+
+<script>
+  function afficherResultats() {
+    document.getElementById('vue-filtre').style.display = 'none';
+    document.getElementById('vue-resultats').style.display = 'block';
+    window.scrollTo(0,0);
+  }
+  function retourFiltre() {
+    document.getElementById('vue-resultats').style.display = 'none';
+    document.getElementById('vue-filtre').style.display = 'block';
+    window.scrollTo(0,0);
+  }
+  document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });
+</script>
+
+</body>
+</html>

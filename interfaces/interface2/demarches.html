@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Démarches — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <div class="nom-site">L'assurance Maladie</div>
+    <div class="sous-titre">Votre espace personnel en ligne</div>
+  </div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html" class="active">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<main>
+  <h1>Tableau de bord</h1>
+
+  <div class="grille-cartes" style="margin-top:20px;">
+    <a href="ceam.html" class="carte">
+      <div class="carte-titre">Commander une CEAM</div>
+      <div class="carte-desc">Carte Européenne d'Assurance Maladie</div>
+    </a>
+    <a href="email.html" class="carte">
+      <div class="carte-titre">Modifier mon adresse email</div>
+      <div class="carte-desc">Mettre à jour mes coordonnées</div>
+    </a>
+    <a href="medecin-traitant.html" class="carte">
+      <div class="carte-titre">Changer de médecin traitant</div>
+      <div class="carte-desc">Procédure et conséquences</div>
+    </a>
+    <a href="delais.html" class="carte">
+      <div class="carte-titre">Délais de traitement</div>
+      <div class="carte-desc">Estimer le délai de ma demande</div>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> –
+  <a href="#">Mentions légales</a> –
+  <a href="#">Accessibilité</a> –
+  <a href="#">Site d'Assurance Maladie</a>
+</footer>
+
+<script>
+  document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });
+</script>
+
+</body>
+</html>

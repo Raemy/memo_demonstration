@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mes informations — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <span class="nom-site">L'assurance Maladie</span>
+    <span class="sous-titre">Votre espace personnel pour vos démarches de santé</span>
+  </div>
+  <button class="btn-deconnexion" id="btnDeconnexion">🔓 Me déconnecter</button>
+</header>
+
+<nav class="nav" role="navigation" aria-label="Navigation principale">
+  <a href="index.html"><span class="nav-icon">🏠</span> Accueil</a>
+  <a href="remboursements.html"><span class="nav-icon">💊</span> Remboursements</a>
+  <a href="demarches.html"><span class="nav-icon">📋</span> Mes démarches</a>
+  <a href="documents.html"><span class="nav-icon">📄</span> Mes documents</a>
+  <a href="informations.html" class="active" aria-current="page"><span class="nav-icon">👤</span> Mes informations</a>
+</nav>
+
+<main>
+
+  <!-- Vue tableau récapitulatif -->
+  <div id="vue-tableau">
+    <h1>Mes informations</h1>
+
+    <table class="table-infos">
+      <tr>
+        <td class="td-label">Nom Prénom</td>
+        <td class="td-valeur">Nom Prénom</td>
+        <td class="td-action">
+          <button class="lien-modifier" onclick="ouvrirModalConfirm('nom')">Modifier</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="td-label">Numéro de sécurité sociale</td>
+        <td class="td-valeur">2 ** ** ** *** 123</td>
+        <td class="td-action">
+          <button class="lien-modifier" onclick="ouvrirModalConfirm('secu')">Modifier</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="td-label">Email</td>
+        <td class="td-valeur">n***@g***.fr</td>
+        <td class="td-action">
+          <button class="lien-modifier" onclick="ouvrirModalConfirm('email')">Modifier</button>
+        </td>
+      </tr>
+      <tr>
+        <td class="td-label">Mes droits</td>
+        <td class="td-valeur" colspan="2" style="color: var(--vert); font-weight:700;">✔ Droits ouverts</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Vue modification email -->
+  <div id="vue-email" style="display:none;">
+    <h1>Modifier mon adresse email</h1>
+    <p class="intro-texte">Saisissez votre nouvelle adresse email. Nous vous enverrons un message de confirmation.</p>
+
+    <div class="champ-groupe">
+      <label class="champ-label" for="nouvelEmail">Nouvelle adresse email</label>
+      <input type="email" class="champ-input" id="nouvelEmail" placeholder="exemple@email.fr" value="nomprenom@email.fr">
+    </div>
+
+    <div class="champ-groupe">
+      <label class="champ-label" for="confirmerEmail">Confirmer la nouvelle adresse email</label>
+      <input type="email" class="champ-input" id="confirmerEmail" placeholder="exemple@email.fr" value="nomprenom@email.fr">
+    </div>
+
+    <div id="vue-btn-email">
+      <button class="btn-primaire" onclick="enregistrerEmail()">
+        💾 Enregistrer ma nouvelle adresse email
+      </button>
+      <button class="btn-secondaire" onclick="annulerEmail()" style="margin-top:12px;">
+        ← Annuler et revenir en arrière
+      </button>
+    </div>
+
+    <div id="vue-succes-email" style="display:none;">
+      <button class="btn-secondaire" onclick="annulerEmail()" style="margin-bottom:16px;">
+        ← Annuler et revenir en arrière
+      </button>
+      <div class="alerte-succes">
+        ✅ Votre adresse email a bien été mise à jour.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-num-secu">Votre numéro d'assuré : <strong>2 ** ** ** *** 123</strong></div>
+  <ul class="footer-liens">
+    <li><a href="cgu.html">Conditions générales d'utilisation</a></li>
+    <li><a href="#">Mentions légales</a></li>
+    <li><a href="#">Accessibilité</a></li>
+    <li><a href="#">Site d'Assurance Maladie</a></li>
+  </ul>
+</footer>
+
+<!-- Modal confirmation avant modification -->
+<div class="modal-overlay" id="modalConfirm" role="dialog" aria-modal="true" aria-labelledby="modalConfirmTitre">
+  <div class="modal-boite">
+    <h2 class="modal-titre" id="modalConfirmTitre">⚠️ Confirmer votre action</h2>
+    <p class="modal-texte" id="modalConfirmTexte">Voulez-vous vraiment accéder à cette modification ?</p>
+    <button class="btn-primaire" id="btnOuiConfirm" onclick="validerConfirm()">
+      ✅ Oui, confirmer mon action
+    </button>
+    <button class="btn-secondaire" onclick="fermerModalConfirm()">
+      ✖ Non, annuler et retourner à l'accueil
+    </button>
+  </div>
+</div>
+
+<!-- Modal déconnexion -->
+<div class="modal-overlay" id="modalDeconnexion" role="dialog" aria-modal="true">
+  <div class="modal-boite">
+    <h2 class="modal-titre">⚠️ Confirmer votre action</h2>
+    <p class="modal-texte">Voulez-vous vraiment vous déconnecter de votre compte ?</p>
+    <button class="btn-primaire" onclick="confirmerDeconnexion()">✅ Oui, me déconnecter</button>
+    <button class="btn-secondaire" onclick="fermerModalDeco()">✖ Non, annuler et rester connecté(e)</button>
+  </div>
+</div>
+
+<script>
+  let actionEnCours = null;
+
+  const textes = {
+    nom: 'Voulez-vous vraiment accéder à : Modifier mon nom et prénom ?',
+    secu: 'Voulez-vous vraiment accéder à : Modifier mon numéro de sécurité social ?',
+    email: 'Voulez-vous vraiment accéder à : Modifier mon adresse email ?'
+  };
+
+  function ouvrirModalConfirm(type) {
+    actionEnCours = type;
+    document.getElementById('modalConfirmTexte').textContent = textes[type] || 'Confirmer ?';
+    document.getElementById('modalConfirm').classList.add('active');
+  }
+
+  function fermerModalConfirm() {
+    document.getElementById('modalConfirm').classList.remove('active');
+    actionEnCours = null;
+  }
+
+  function validerConfirm() {
+    fermerModalConfirm();
+    if (actionEnCours === 'email') {
+      document.getElementById('vue-tableau').style.display = 'none';
+      document.getElementById('vue-email').style.display = 'block';
+      document.getElementById('vue-btn-email').style.display = 'block';
+      document.getElementById('vue-succes-email').style.display = 'none';
+      window.scrollTo(0,0);
+    }
+    // nom et secu : pas de page dédiée dans ce prototype
+  }
+
+  function enregistrerEmail() {
+    document.getElementById('vue-btn-email').style.display = 'none';
+    document.getElementById('vue-succes-email').style.display = 'block';
+    window.scrollTo(0,0);
+  }
+
+  function annulerEmail() {
+    document.getElementById('vue-email').style.display = 'none';
+    document.getElementById('vue-tableau').style.display = 'block';
+    window.scrollTo(0,0);
+  }
+
+  document.getElementById('btnDeconnexion').addEventListener('click', () => document.getElementById('modalDeconnexion').classList.add('active'));
+  function fermerModalDeco() { document.getElementById('modalDeconnexion').classList.remove('active'); }
+  function confirmerDeconnexion() { fermerModalDeco(); }
+
+  document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('active'); }));
+  document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active')); });
+</script>
+
+</body>
+</html>

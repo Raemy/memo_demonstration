@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attestation de droits — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-brand"><div class="nom-site">L'assurance Maladie</div><div class="sous-titre">Votre espace personnel en ligne</div></div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html">Démarches</a>
+  <a href="documents.html" class="active">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main>
+  <div class="breadcrumb"><a href="demarches.html">← Retour aux démarches</a></div>
+  <h1>Attestation de droits</h1>
+  <div class="alerte-warning" style="margin-top:16px;">
+    À titre exceptionnel ou si vous n'avez pas votre carte Vitale, certains établissements peuvent réclamer votre attestation.
+  </div>
+  <div class="zone-info-card">
+    Attestation pour :<br>
+    <strong>NOM PRENOM – XX/XX/XXXX</strong>
+  </div>
+  <div id="vue-btn">
+    <button class="btn-primaire" onclick="telecharger()">Télécharger l'attestation de droits</button>
+  </div>
+  <div id="vue-confirm" class="alerte-succes" style="display:none; margin-top:12px;">
+    Formulaire Cerfa n°12485 en cours de téléchargement…
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> – <a href="#">Mentions légales</a> – <a href="#">Accessibilité</a> – <a href="#">Site d'Assurance Maladie</a>
+</footer>
+<script>
+  function telecharger() {
+    document.getElementById('vue-btn').innerHTML = '<button class="btn-primaire" disabled style="opacity:0.6;">Télécharger l\'attestation de droits</button>';
+    document.getElementById('vue-confirm').style.display='block';
+  }
+  document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });
+</script>
+</body>
+</html>

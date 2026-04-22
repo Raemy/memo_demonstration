@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vos informations — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-brand"><div class="nom-site">L'assurance Maladie</div><div class="sous-titre">Votre espace personnel en ligne</div></div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html" class="active">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main>
+  <h1>Vos informations</h1>
+  <table class="table-infos" style="margin-top:16px;">
+    <tr>
+      <td class="td-label">Numéro de sécurité sociale</td>
+      <td class="td-valeur">1 23 45 67 891 011</td>
+      <td class="td-lien"></td>
+    </tr>
+    <tr>
+      <td class="td-label">Droits</td>
+      <td class="td-valeur">Vos droits sont ouverts</td>
+      <td class="td-lien"></td>
+    </tr>
+    <tr>
+      <td class="td-label">Médecin traitant</td>
+      <td class="td-valeur">Non déclaré</td>
+      <td class="td-lien"><a href="medecin-traitant.html">Déclarer →</a></td>
+    </tr>
+    <tr>
+      <td class="td-label">Carte européenne d'assurance maladie</td>
+      <td class="td-valeur"><span class="dot-rouge">●</span> Aucune carte en cours</td>
+      <td class="td-lien"><a href="ceam.html">Commander →</a></td>
+    </tr>
+    <tr>
+      <td class="td-label">Email</td>
+      <td class="td-valeur">r***@g***.com</td>
+      <td class="td-lien"><a href="email.html">Modifier →</a></td>
+    </tr>
+    <tr>
+      <td class="td-label">Coordonnées bancaires</td>
+      <td class="td-valeur">FR** *** *** ***00 ***</td>
+      <td class="td-lien"></td>
+    </tr>
+  </table>
+</main>
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> – <a href="#">Mentions légales</a> – <a href="#">Accessibilité</a> – <a href="#">Site d'Assurance Maladie</a>
+</footer>
+<script>document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });</script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'assurance Maladie — Tableau de bord</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <div class="nom-site">L'assurance Maladie</div>
+    <div class="sous-titre">Votre espace personnel en ligne</div>
+  </div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+
+<nav class="nav">
+  <a href="index.html" class="active">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+
+<main>
+  <h1>Tableau de bord</h1>
+
+  <!-- Version 1 : 3 cartes rapides -->
+  <div class="grille-cartes-3" style="margin-top:20px;">
+    <div class="carte">
+      <div class="carte-titre">Derniers paiements</div>
+      <div class="carte-desc">Janvier 2026</div>
+      <a href="remboursements.html" class="carte-lien">Voir mes remboursements →</a>
+    </div>
+    <div class="carte">
+      <div class="carte-titre">Mes documents</div>
+      <div class="carte-desc">Attestation de droits</div>
+      <a href="attestation.html" class="carte-lien">Télécharger →</a>
+    </div>
+    <div class="carte">
+      <div class="carte-titre">Mes démarches</div>
+      <div class="carte-desc">Accéder à toutes mes démarches</div>
+      <a href="demarches.html" class="carte-lien">Accéder →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> –
+  <a href="#">Mentions légales</a> –
+  <a href="#">Accessibilité</a> –
+  <a href="#">Site d'Assurance Maladie</a>
+</footer>
+
+<!-- Modal déconnexion : simple confirm natif (Type 2 = pas de double confirmation stylée) -->
+<script>
+  document.getElementById('btnDeco').addEventListener('click', function() {
+    if (confirm('Voulez-vous vous déconnecter ?')) {
+      alert('Déconnexion réussie.');
+    }
+  });
+</script>
+
+</body>
+</html>

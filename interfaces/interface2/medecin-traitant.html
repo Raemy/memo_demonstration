@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Changer de médecin traitant — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-brand"><div class="nom-site">L'assurance Maladie</div><div class="sous-titre">Votre espace personnel en ligne</div></div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html" class="active">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main>
+  <div class="breadcrumb"><a href="demarches.html">← Retour aux démarches</a></div>
+  <h1>Changer de médecin traitant</h1>
+
+  <div class="bloc-etape">
+    <h2>Comment faire ?</h2>
+    <p>Remplissez le formulaire Cerfa n°12485 avec votre nouveau médecin lors de votre prochaine consultation. Le médecin le transmet ensuite à votre caisse.</p>
+  </div>
+
+  <div class="bloc-etape">
+    <h2>Conséquences du changement</h2>
+    <ul>
+      <li>Sans médecin traitant déclaré : remboursements réduits.</li>
+      <li>Le changement prend effet dès réception du formulaire par votre caisse.</li>
+      <li>Vous pouvez changer de médecin traitant autant de fois que nécessaire.</li>
+    </ul>
+  </div>
+
+  <div id="vue-btn">
+    <button class="btn-primaire" onclick="telecharger()" style="margin-top:8px;">Télécharger le formulaire</button>
+  </div>
+
+  <div id="vue-confirm" class="alerte-succes" style="display:none; margin-top:12px;">
+    Formulaire Cerfa n°12485 en cours de téléchargement…
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> – <a href="#">Mentions légales</a> – <a href="#">Accessibilité</a> – <a href="#">Site d'Assurance Maladie</a>
+</footer>
+<script>
+  function telecharger() {
+    document.getElementById('vue-btn').innerHTML = '';
+    document.getElementById('vue-confirm').style.display='block';
+  }
+  document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });
+</script>
+</body>
+</html>

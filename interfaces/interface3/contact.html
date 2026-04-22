@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nous contacter — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <span class="nom-site">L'assurance Maladie</span>
+    <span class="sous-titre">Votre espace personnel pour vos démarches de santé</span>
+  </div>
+  <button class="btn-deconnexion" id="btnDeconnexion">🔓 Me déconnecter</button>
+</header>
+
+<nav class="nav" role="navigation" aria-label="Navigation principale">
+  <a href="index.html"><span class="nav-icon">🏠</span> Accueil</a>
+  <a href="remboursements.html"><span class="nav-icon">💊</span> Remboursements</a>
+  <a href="demarches.html"><span class="nav-icon">📋</span> Mes démarches</a>
+  <a href="documents.html"><span class="nav-icon">📄</span> Mes documents</a>
+  <a href="informations.html"><span class="nav-icon">👤</span> Mes informations</a>
+</nav>
+
+<main>
+  <h1>Nous contacter</h1>
+  <p class="intro-texte">Retrouvez ci-dessous nos coordonnées pour toute question concernant votre dossier.</p>
+
+  <div class="zone-info" style="font-size:1.1rem; margin-bottom:28px;">
+    📞 <strong>Numéro de téléphone :</strong><br>
+    <span style="font-size:2rem; font-weight:700; letter-spacing:0.1em;">36 46</span><br>
+    <span style="font-size:0.9rem; color:#555;">(du lundi au vendredi, de 8h00 à 17h00 — Appel non surtaxé)</span>
+  </div>
+
+  <div class="zone-info">
+    🌐 <strong>Site officiel :</strong> <a href="#" style="color:var(--bleu-focus); font-weight:700;">ameli.fr</a><br><br>
+    📮 <strong>Par courrier :</strong> Contactez votre CPAM locale (Caisse Primaire d'Assurance Maladie).
+  </div>
+
+  <a href="index.html" class="btn-secondaire" style="margin-top:8px; display:block; text-align:center; text-decoration:none; max-width:400px;">
+    ← Retour à l'accueil
+  </a>
+</main>
+
+<footer>
+  <div class="footer-num-secu">Votre numéro d'assuré : <strong>2 ** ** ** *** 123</strong></div>
+  <ul class="footer-liens">
+    <li><a href="cgu.html">Conditions générales d'utilisation</a></li>
+    <li><a href="#">Mentions légales</a></li>
+    <li><a href="#">Accessibilité</a></li>
+    <li><a href="#">Site d'Assurance Maladie</a></li>
+  </ul>
+</footer>
+
+<div class="modal-overlay" id="modalDeconnexion" role="dialog" aria-modal="true">
+  <div class="modal-boite">
+    <h2 class="modal-titre">⚠️ Confirmer votre action</h2>
+    <p class="modal-texte">Voulez-vous vraiment vous déconnecter ?</p>
+    <button class="btn-primaire" onclick="fermerModal()">✅ Oui, me déconnecter</button>
+    <button class="btn-secondaire" onclick="fermerModal()">✖ Non, rester connecté(e)</button>
+  </div>
+</div>
+
+<script>
+  document.getElementById('btnDeconnexion').addEventListener('click', () => document.getElementById('modalDeconnexion').classList.add('active'));
+  function fermerModal() { document.getElementById('modalDeconnexion').classList.remove('active'); }
+  document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('active'); }));
+  document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active')); });
+</script>
+
+</body>
+</html>

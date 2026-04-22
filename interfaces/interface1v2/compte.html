@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assurance Maladie — Compte</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- HEADER : fond violet pâle différent des autres pages -->
+<div class="header" style="background:#ece8f4; border-bottom-color:#d4cce8;">
+  <span class="header-brand" style="color:#aaaacc;">Assurance Maladie</span>
+  <button class="btn-deconnexion" id="btnDeco" style="background:#ece8f4; border-color:#cccce4; color:#c0b8d8;">Se déconnecter</button>
+</div>
+<nav class="nav">
+  <a href="index.html">Accueil</a><span class="nav-sep">|</span>
+  <a href="services.html">Plan de santé</a><span class="nav-sep">|</span>
+  <a href="services.html">Service</a><span class="nav-sep">|</span>
+  <a href="demarches.html">Démarche</a><span class="nav-sep">|</span>
+  <a href="documents.html">Documents</a><span class="nav-sep">|</span>
+  <a href="compte.html" class="active">Compte</a><span class="nav-sep">|</span>
+  <a href="#">Aide</a><span class="nav-sep">|</span>
+  <a href="#">Contact</a><span class="nav-sep">|</span>
+  <a href="#">FAQ</a><span class="nav-sep">|</span>
+  <a href="cgu.html">Mentions Légales</a>
+</nav>
+<main>
+  <div id="vue-formulaire">
+    <h1>Modifier vos informations personnelles et coordonnées bancaires</h1>
+    <div style="display:flex; gap:16px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:260px;">
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">Nom</span><input type="text" class="champ-input" style="width:100%;"></div>
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">&nbsp;</span><input type="text" class="champ-input" style="width:100%;"></div>
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">Email</span><input type="email" class="champ-input" style="width:100%;" value="Dom.prenom@email.fr" placeholder="Dom.prenom@email.fr"></div>
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">Adresse postale</span><input type="text" class="champ-input" style="width:100%;"></div>
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">RIB</span><input type="text" class="champ-input" style="width:100%;"></div>
+      </div>
+      <div style="flex:1; min-width:260px;">
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">Prénom</span><input type="text" class="champ-input" style="width:100%;"></div>
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">Téléphone</span><input type="tel" class="champ-input" style="width:100%;"></div>
+        <div style="height:19px;"></div>
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">Commune</span><input type="text" class="champ-input" style="width:100%;"></div>
+        <div style="margin-bottom:2px;"><span style="font-size:10px; color:#aabbcc; display:block;">Mot de passe</span><input type="password" class="champ-input" style="width:100%;"></div>
+      </div>
+    </div>
+    <p class="alerte-info">Les modifications apportées à vos informations personnelles seront prises en compte dans un délai de 10 jours ouvrés. Pour les changements de RIB, prévoir un délai supplémentaire de traitement. Veillez à bien vérifier l'exactitude des informations saisies car toute erreur pourrait entraîner des retards dans vos remboursements ou la réception de vos documents officiels.</p>
+    <div style="margin-top:3px;">
+      <button class="btn-primaire" onclick="enregistrer()">Valider</button>
+      <button class="btn-secondaire" onclick="window.history.back()" style="margin-left:3px;">Retour</button>
+      <button class="btn-secondaire" style="margin-left:3px;">Résilier le compte</button>
+    </div>
+  </div>
+  <div id="vue-confirmation" style="display:none;">
+    <h1>Modifier vos informations personnelles et coordonnées bancaires</h1>
+    <span class="alerte-succes">Vos informations ont été mises à jour.</span>
+    <br><br>
+    <button class="btn-secondaire" onclick="retourFormulaire()">Retour</button>
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">N° sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Mentions légales</a> <a href="cgu.html">CGU</a> Protection des données<br>
+  © 2026 Administration Française – Version 3.2.1 build 20260315-1847
+</footer>
+<script>
+  function enregistrer() { document.getElementById('vue-formulaire').style.display='none'; document.getElementById('vue-confirmation').style.display='block'; }
+  function retourFormulaire() { document.getElementById('vue-confirmation').style.display='none'; document.getElementById('vue-formulaire').style.display='block'; }
+  document.getElementById('btnDeco').addEventListener('click', () => window.location.href='index.html');
+</script>
+</body>
+</html>

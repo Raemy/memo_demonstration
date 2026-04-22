@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CGU — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-brand"><div class="nom-site">L'assurance Maladie</div><div class="sous-titre">Votre espace personnel en ligne</div></div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main>
+  <h1>Conditions générales d'utilisation</h1>
+  <p class="intro-texte" style="margin-top:16px;">Dernière mise à jour : 1er janvier 2026</p>
+
+  <h2 style="margin-bottom:6px; margin-top:16px;">1. Présentation du service</h2>
+  <p style="font-size:14px; color:#333; line-height:1.6; margin-bottom:12px;">Ce service est proposé par la Caisse Nationale d'Assurance Maladie (CNAM) afin de permettre aux assurés sociaux d'accéder à leur espace personnel en ligne.</p>
+
+  <h2 style="margin-bottom:6px;">2. Protection des données personnelles</h2>
+  <p style="font-size:14px; color:#333; line-height:1.6; margin-bottom:12px;">Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles.</p>
+
+  <h2 style="margin-bottom:6px;">3. Disponibilité</h2>
+  <p style="font-size:14px; color:#333; line-height:1.6; margin-bottom:12px;">L'Assurance Maladie s'efforce de maintenir le service accessible 24h/24 et 7j/7.</p>
+
+  <a href="index.html" class="btn-secondaire" style="margin-top:8px; display:inline-block; text-decoration:none;">← Retour à l'accueil</a>
+</main>
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> – <a href="#">Mentions légales</a> – <a href="#">Accessibilité</a> – <a href="#">Site d'Assurance Maladie</a>
+</footer>
+<script>document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });</script>
+</body>
+</html>

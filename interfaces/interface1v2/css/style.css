@@ -1,0 +1,363 @@
+/* ===== INTERFACE TYPE 1 — VRAIMENT HOSTILE ===== */
+/* Contraste < 3:1, boutons < 24px, pas de hover/feedback, couleurs pastel/bleu-vert-violet */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 11px; }
+
+body {
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  font-size: 11px;
+  background: #f0f4f8; /* fond bleuté pâle */
+  color: #8899aa;      /* texte gris-bleu pâle sur fond bleuté = contraste ~2:1 */
+  line-height: 1.2;
+}
+
+/* ===== HEADER — position variable selon page (définie par classe page-X) ===== */
+.header {
+  background: #dde8f0; /* bleu très pâle */
+  border-bottom: 1px solid #c8d8e4;
+  padding: 3px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  font-size: 10px;
+  color: #aabbcc; /* très pâle */
+  font-style: italic;
+}
+
+/* Bouton déco : sur certaines pages il est à gauche, sur d'autres à droite, parfois au milieu */
+.btn-deconnexion {
+  background: #e8eef2;
+  color: #b0bec8;       /* texte quasi invisible sur fond quasi blanc */
+  border: 1px solid #d0dde6;
+  padding: 1px 4px;
+  font-size: 9px;
+  cursor: default;      /* pas de pointeur, semble non cliquable */
+  font-family: Arial, sans-serif;
+  /* pas de hover défini */
+}
+
+/* ===== NAV — couleurs pastel bleu/vert/violet, peu lisibles ===== */
+.nav {
+  background: #e8f0e8; /* fond vert pâle */
+  border-bottom: 1px solid #c8dcc8;
+  padding: 0 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.nav a {
+  display: inline-block;
+  padding: 3px 6px;
+  font-size: 10px;
+  color: #7799bb;      /* bleu pâle sur vert pâle = mauvais contraste */
+  text-decoration: none; /* pas de soulignement = pas d'affordance lien */
+  white-space: nowrap;
+  /* PAS de :hover */
+}
+
+.nav a.active {
+  color: #8899cc;
+  text-decoration: none;
+}
+
+.nav-sep {
+  padding: 3px 1px;
+  color: #c8d8c8;
+  font-size: 10px;
+}
+
+/* ===== MAIN ===== */
+main {
+  padding: 6px 8px;
+  max-width: 1200px;
+}
+
+/* ===== TITRES ===== */
+h1 {
+  font-size: 11px;
+  font-weight: normal; /* pas bold = pas de hiérarchie */
+  color: #99aabb;
+  margin-bottom: 3px;
+}
+
+h2 {
+  font-size: 10px;
+  font-weight: normal;
+  color: #aabbcc;
+  margin-bottom: 2px;
+}
+
+.intro-texte {
+  font-size: 10px;
+  color: #aabbcc;
+  margin-bottom: 4px;
+}
+
+/* ===== BOUTONS — < 24x24px, quasi invisibles, aucune affordance ===== */
+.btn-primaire {
+  background: #e4eef4;   /* fond bleu très pâle */
+  color: #aabbc8;        /* texte bleu pâle sur fond bleu pâle ≈ contraste 1.5:1 */
+  border: 1px solid #ccdde8;
+  padding: 0px 4px;      /* hauteur réelle ~14px */
+  font-size: 9px;
+  cursor: default;       /* semble non cliquable */
+  font-family: Arial, sans-serif;
+  display: inline-block;
+  text-decoration: none;
+  min-height: 14px;
+  /* PAS de :hover, PAS de :focus visible */
+}
+
+.btn-primaire:focus { outline: none; }
+
+.btn-secondaire {
+  background: #eef2ee;
+  color: #bbccbb;
+  border: 1px solid #d4e4d4;
+  padding: 0px 3px;
+  font-size: 9px;
+  cursor: default;
+  font-family: Arial, sans-serif;
+  display: inline-block;
+  text-decoration: none;
+  min-height: 14px;
+}
+
+.btn-secondaire:focus { outline: none; }
+
+/* ===== LIENS — mêmes couleurs que le texte, non distinguables ===== */
+a {
+  color: #99aabb;        /* même couleur que le texte normal */
+  text-decoration: none; /* pas de soulignement */
+}
+
+/* ===== FORMULAIRES — champs quasi invisibles ===== */
+.champ-groupe {
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.champ-label {
+  font-size: 10px;
+  color: #aabbcc;
+  min-width: 100px;
+  display: inline-block;
+}
+
+.champ-input {
+  border: 1px solid #ccdde8; /* bordure très pâle */
+  padding: 1px 2px;
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+  color: #aabbcc;       /* texte pâle dans le champ */
+  width: 280px;
+  background: #f0f6fa; /* fond bleu très pâle, quasi identique au body */
+}
+
+.champ-input:focus { outline: none; border-color: #c0d4e4; }
+
+.champ-select {
+  border: 1px solid #ccdde8;
+  padding: 0px 2px;
+  font-size: 10px;
+  font-family: Arial, sans-serif;
+  color: #aabbcc;
+  background: #f0f6fa;
+  height: 16px;
+}
+
+.champ-select:focus { outline: none; }
+
+/* ===== TABLEAU ===== */
+.tableau-donnees {
+  border-collapse: collapse;
+  font-size: 10px;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.tableau-donnees th {
+  background: #e4eef4;
+  border: 1px solid #ccdde8;
+  padding: 1px 4px;
+  font-size: 10px;
+  font-weight: normal; /* pas de gras sur les en-têtes */
+  color: #aabbcc;
+  text-align: left;
+}
+
+.tableau-donnees td {
+  border: 1px solid #ddeaf2;
+  padding: 1px 4px;
+  font-size: 10px;
+  color: #aabbcc;
+  vertical-align: top;
+}
+
+.tableau-donnees tr:nth-child(even) td {
+  background: #eef4f8; /* différence quasi invisible avec fond blanc */
+}
+
+/* ===== ZONES INFO ===== */
+.zone-info {
+  font-size: 10px;
+  color: #aabbcc;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+/* ===== LAYOUT SIDEBAR ===== */
+.layout-sidebar {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebar {
+  width: 210px;
+  flex-shrink: 0;
+  font-size: 10px;
+}
+
+.sidebar-section { margin-bottom: 6px; }
+
+.sidebar-titre {
+  font-size: 10px;
+  font-weight: normal;
+  color: #aabbcc;
+  border-bottom: 1px solid #ccdde8;
+  padding-bottom: 1px;
+  margin-bottom: 3px;
+}
+
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar ul li { padding: 1px 0; }
+.sidebar ul li a {
+  font-size: 10px;
+  color: #99aabb;      /* même couleur que texte, pas de soulignement */
+  text-decoration: none;
+}
+
+.contenu-principal { flex: 1; }
+
+/* ===== ALERTES — quasi invisibles ===== */
+.alerte-succes {
+  background: #eef4ee;
+  border: 1px solid #ccdece;
+  padding: 2px 6px;
+  font-size: 10px;
+  color: #aaccaa; /* vert pâle sur fond vert pâle */
+  display: inline-block;
+}
+
+.alerte-info {
+  font-size: 9px;
+  color: #bbccbb;
+  margin: 3px 0;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+/* ===== ACCUEIL GRID ===== */
+.accueil-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.widget {
+  border: 1px solid #ccdde8;
+  padding: 4px;
+  background: #eef4f8;
+  font-size: 10px;
+}
+
+.widget-titre {
+  font-size: 10px;
+  font-weight: normal;
+  color: #aabbcc;
+  border-bottom: 1px solid #ccdde8;
+  margin-bottom: 3px;
+  padding-bottom: 1px;
+}
+
+.widget p {
+  font-size: 9px;
+  color: #bbccdd;
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.col3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+}
+
+.col2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.bandeau-important {
+  background: #eef0f8; /* violet très pâle */
+  border: 1px solid #cccce8;
+  padding: 3px 6px;
+  font-size: 9px;
+  color: #aaaacc; /* violet pâle sur fond violet pâle */
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.etapes-liste {
+  margin: 2px 0 6px 12px;
+  padding-left: 8px;
+}
+
+.etapes-liste li {
+  font-size: 10px;
+  color: #aabbcc;
+  margin-bottom: 2px;
+  line-height: 1.3;
+}
+
+.barre-filtre {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: #aabbcc;
+}
+
+.liste-demarches { font-size: 10px; margin-bottom: 6px; }
+.liste-demarches p { margin-bottom: 2px; line-height: 1.3; color: #aabbcc; }
+
+/* ===== FOOTER ===== */
+footer {
+  border-top: 1px solid #ccdde8;
+  padding: 3px 8px;
+  background: #e8f0f8;
+  font-size: 9px;
+  color: #bbccdd;
+  margin-top: 8px;
+  line-height: 1.3;
+}
+
+footer a { color: #bbccdd; text-decoration: none; font-size: 9px; }
+
+.footer-secu {
+  font-size: 9px;
+  color: #c4d4e4; /* quasi invisible */
+  margin-bottom: 1px;
+}

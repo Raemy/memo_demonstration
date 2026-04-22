@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assurance Maladie — Remboursements</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- HEADER : bouton déco centré sur cette page (incohérence volontaire) -->
+<div class="header" style="justify-content:center; gap:16px;">
+  <span class="header-brand">Assurance Maladie</span>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</div>
+
+<nav class="nav">
+  <a href="index.html">Accueil</a><span class="nav-sep">|</span>
+  <a href="services.html">Plan de santé</a><span class="nav-sep">|</span>
+  <a href="services.html">Service</a><span class="nav-sep">|</span>
+  <a href="demarches.html">Démarche</a><span class="nav-sep">|</span>
+  <a href="documents.html">Documents</a><span class="nav-sep">|</span>
+  <a href="compte.html">Compte</a><span class="nav-sep">|</span>
+  <a href="#">Aide</a><span class="nav-sep">|</span>
+  <a href="#">Contact</a><span class="nav-sep">|</span>
+  <a href="#">FAQ</a><span class="nav-sep">|</span>
+  <a href="cgu.html">Mentions Légales</a>
+</nav>
+
+<main>
+  <div class="layout-sidebar">
+    <div class="sidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-titre">Vos paiements et remboursements</div>
+        <ul>
+          <li><a href="remboursements.html">Relevés mensuels</a></li>
+          <li><a href="#">Relevé annuel</a></li>
+          <li><a href="#">Participations forfaitaires</a></li>
+          <li><a href="#">Créance</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="contenu-principal">
+      <div id="vue-filtre">
+        <div class="barre-filtre">
+          Filtrer par période :
+          Du <input type="date" class="champ-input" style="width:110px;" value="2026-04-08">
+          Au <input type="date" class="champ-input" style="width:110px;" value="2026-04-08">
+          <select class="champ-select" style="width:130px;">
+            <option>Remboursements</option>
+            <option>Tous types</option>
+          </select>
+          <button class="btn-primaire" onclick="afficherResultats()">OK</button>
+        </div>
+        <p class="zone-info">Vous recherchez un paiement de plus de 6 mois ? <a href="#">Accédez à vos relevés mensuels des 27 derniers mois</a></p>
+        <button class="btn-secondaire" onclick="window.history.back()">Retour</button>
+      </div>
+
+      <div id="vue-resultats" style="display:none;">
+        <!-- Nav secondaire incohérente : ici en ligne horizontale au lieu de sidebar -->
+        <div style="font-size:10px; color:#aabbcc; margin-bottom:4px;">
+          Vos paiements et remboursements :
+          <a href="#">Relevés mensuels</a> |
+          <a href="#">Relevé annuel</a> |
+          <a href="#">Participations forfaitaires</a> |
+          <a href="#">Créance</a>
+        </div>
+
+        <table class="tableau-donnees">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Libellé</th>
+              <th>Base</th>
+              <th>Taux</th>
+              <th>Montant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>08 avr.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation du médecin généraliste</td>
+              <td>Base rem.: 25,00 €</td>
+              <td>Taux 70%</td>
+              <td>17,50 €</td>
+            </tr>
+            <tr>
+              <td>02 avr.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation du médecin généraliste</td>
+              <td>Base rem.: 25,00 €</td>
+              <td>Taux 70%</td>
+              <td>17,50 €</td>
+            </tr>
+            <tr>
+              <td>02 avr.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation ophtalmologie</td>
+              <td>Base rem.: 30,00 €</td>
+              <td>Taux 70%</td>
+              <td>21,00 €</td>
+            </tr>
+            <tr>
+              <td>15 mars</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation généraliste</td>
+              <td>Base rem.: 25,00 €</td>
+              <td>Taux 5%</td>
+              <td>0,00 €</td>
+            </tr>
+            <tr>
+              <td>14 fév.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation généraliste</td>
+              <td>Base rem.: 25,00 €</td>
+              <td>Taux 70%</td>
+              <td>24,00 €</td>
+            </tr>
+            <tr>
+              <td>12 fév.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation généraliste</td>
+              <td>Base rem.: 25,00 €</td>
+              <td>Taux 5%</td>
+              <td>0,00 €</td>
+            </tr>
+            <tr>
+              <td>07 jan.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation généraliste</td>
+              <td>Base rem.: 25,00 €</td>
+              <td>Taux 5%</td>
+              <td>0,00 €</td>
+            </tr>
+            <tr>
+              <td>12 déc.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation généraliste</td>
+              <td>Base rem.: 25,00 €</td>
+              <td>Taux 70%</td>
+              <td>17,50 €</td>
+            </tr>
+            <tr>
+              <td>12 déc.</td>
+              <td>Remboursement de soins</td>
+              <td>Consultation psychologique</td>
+              <td>Base rem.: 50,00 €</td>
+              <td>Taux 70%</td>
+              <td>35,00 €</td>
+            </tr>
+          </tbody>
+        </table>
+        <button class="btn-secondaire" onclick="retourFiltres()">Retour</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-secu">N° sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Mentions légales</a> <a href="cgu.html">CGU</a> Protection des données <a href="#">Gestion des cookies</a> <a href="#">Accessibilité</a> <a href="#">Plan du site</a><br>
+  © 2026 Administration Française – Version 3.2.1 build 20260315-1847 – Résolution recommandée 1920×1080
+</footer>
+
+<script>
+  function afficherResultats() {
+    document.getElementById('vue-filtre').style.display = 'none';
+    document.getElementById('vue-resultats').style.display = 'block';
+  }
+  function retourFiltres() {
+    document.getElementById('vue-resultats').style.display = 'none';
+    document.getElementById('vue-filtre').style.display = 'block';
+  }
+  document.getElementById('btnDeco').addEventListener('click', () => window.location.href='index.html');
+</script>
+</body>
+</html>

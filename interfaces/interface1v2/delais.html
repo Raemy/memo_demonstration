@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assurance Maladie — Délais</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- HEADER : fond vert différent, bouton déco au milieu -->
+<div class="header" style="background:#e0ece0; justify-content:space-around;">
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+  <span class="header-brand">Assurance Maladie</span>
+  <span></span>
+</div>
+<nav class="nav">
+  <a href="index.html">Accueil</a><span class="nav-sep">|</span>
+  <a href="services.html">Plan de santé</a><span class="nav-sep">|</span>
+  <a href="services.html">Service</a><span class="nav-sep">|</span>
+  <a href="demarches.html" class="active">Démarche</a><span class="nav-sep">|</span>
+  <a href="documents.html">Documents</a><span class="nav-sep">|</span>
+  <a href="compte.html">Compte</a><span class="nav-sep">|</span>
+  <a href="#">Aide</a><span class="nav-sep">|</span>
+  <a href="#">Contact</a><span class="nav-sep">|</span>
+  <a href="#">FAQ</a><span class="nav-sep">|</span>
+  <a href="cgu.html">Mentions Légales</a>
+</nav>
+<main>
+  <div id="vue-form">
+    <h1>Délais de traitement de ma caisse</h1>
+    <p class="zone-info">Indiquez la thématique de votre demande :</p>
+    <div class="champ-groupe">
+      <select class="champ-select" style="width:200px;">
+        <option>Remboursement des soins</option>
+        <option>Changement de caisse</option>
+        <option>Attestation de droits</option>
+      </select>
+    </div>
+    <p class="zone-info" style="margin-top:3px;">Date de début :</p>
+    <div class="champ-groupe">
+      <input type="date" class="champ-input" style="width:130px;" value="2026-04-08">
+    </div>
+    <div style="margin-top:3px;">
+      <button class="btn-primaire" onclick="afficherResultats()">Valider</button>
+      <button class="btn-secondaire" onclick="window.history.back()" style="margin-left:4px;">Retour</button>
+    </div>
+  </div>
+  <div id="vue-resultats" style="display:none;">
+    <h1>Délais de traitement de ma caisse</h1>
+    <p class="zone-info">Indiquez la thématique de votre demande :</p>
+    <div class="champ-groupe">
+      <select class="champ-select" style="width:200px;"><option>Remboursement des soins</option></select>
+    </div>
+    <p class="zone-info" style="margin-top:3px;">Date de début :</p>
+    <div class="champ-groupe">
+      <input type="date" class="champ-input" style="width:130px;" value="2026-04-08">
+    </div>
+    <div style="margin-top:3px;">
+      <button class="btn-primaire" onclick="afficherResultats()">Valider</button>
+      <button class="btn-secondaire" onclick="retourForm()" style="margin-left:4px;">Retour</button>
+    </div>
+    <br>
+    <p class="zone-info">Si démarche en ligne : 13/04/2026</p>
+    <p class="zone-info">Si démarche en caisse ou par courrier : 04/05/2026</p>
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">N° sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Mentions légales</a> <a href="cgu.html">CGU</a> Protection des données<br>
+  © 2026 Administration Française – Version 3.2.1 build 20260315-1847
+</footer>
+<script>
+  function afficherResultats() { document.getElementById('vue-form').style.display='none'; document.getElementById('vue-resultats').style.display='block'; }
+  function retourForm() { document.getElementById('vue-resultats').style.display='none'; document.getElementById('vue-form').style.display='block'; }
+  document.getElementById('btnDeco').addEventListener('click', () => window.location.href='index.html');
+</script>
+</body>
+</html>

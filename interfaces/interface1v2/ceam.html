@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assurance Maladie — Carte Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- HEADER : pas de bouton déco visible (quasi absent) -->
+<div class="header" style="background:#eef4f0;">
+  <span class="header-brand">Assurance Maladie</span>
+  <button class="btn-deconnexion" id="btnDeco" style="color:#c8d8c8; border-color:#c8d8c8; background:#eef4f0;">déco</button>
+</div>
+<nav class="nav" style="background:#f0e8f0;"><!-- nav fond violet pâle sur cette page -->
+  <a href="index.html" style="color:#bb99cc;">Accueil</a><span class="nav-sep">|</span>
+  <a href="services.html" style="color:#bb99cc;">Plan de santé</a><span class="nav-sep">|</span>
+  <a href="services.html" style="color:#bb99cc;">Service</a><span class="nav-sep">|</span>
+  <a href="demarches.html" class="active" style="color:#9988bb;">Démarche</a><span class="nav-sep">|</span>
+  <a href="documents.html" style="color:#bb99cc;">Documents</a><span class="nav-sep">|</span>
+  <a href="compte.html" style="color:#bb99cc;">Compte</a><span class="nav-sep">|</span>
+  <a href="#">Aide</a><span class="nav-sep">|</span>
+  <a href="#">Contact</a><span class="nav-sep">|</span>
+  <a href="#">FAQ</a><span class="nav-sep">|</span>
+  <a href="cgu.html">Mentions Légales</a>
+</nav>
+<main>
+  <div id="vue-liste">
+    <h1>À propos de vos cartes d'assurance maladie</h1>
+    <p class="zone-info">Commander une nouvelle vitale <button class="btn-primaire" onclick="afficherCEAM()">Commander</button></p>
+    <p class="zone-info">Signaler la perte ou le vol de votre carte vitale <button class="btn-primaire">Signaler</button></p>
+    <p class="zone-info">Commander une carte européenne d'assurance maladie (CAEM) <button class="btn-primaire" onclick="afficherCEAM()">Commander</button></p>
+    <br>
+    <button class="btn-secondaire" onclick="window.location.href='demarches.html'">Retour</button>
+  </div>
+  <div id="vue-form" style="display:none;">
+    <h1>Commander une Carte Européenne d'Assurance Maladie</h1>
+    <p class="zone-info">La carte européenne d'assurance maladie (CEAM) permet de bénéficier de la prise en charge des soins lors d'un séjour temporaire dans un pays de l'Union européenne.</p>
+    <p class="zone-info">Attestation pour :<br>M/Mme XXX – XX/XX/XXXX</p>
+    <button class="btn-primaire" onclick="valider()">Valider</button>
+    <br><br>
+    <button class="btn-secondaire" onclick="retourListe()">Retour</button>
+  </div>
+  <div id="vue-confirm" style="display:none;">
+    <h1>Commander une Carte Européenne d'Assurance Maladie</h1>
+    <p class="zone-info">Attestation pour :<br>M/Mme XXX – XX/XX/XXXX</p>
+    <p class="zone-info">Vous recevrez votre carte sous 15 jours.</p>
+    <span class="alerte-succes">Votre demande a bien été enregistrée.</span>
+    <br><br>
+    <button class="btn-secondaire" onclick="window.location.href='demarches.html'">Retour</button>
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">N° sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Mentions légales</a> <a href="cgu.html">CGU</a> Protection des données<br>
+  © 2026 Administration Française – Version 3.2.1 build 20260315-1847
+</footer>
+<script>
+  function afficherCEAM() { document.getElementById('vue-liste').style.display='none'; document.getElementById('vue-form').style.display='block'; }
+  function valider() { document.getElementById('vue-form').style.display='none'; document.getElementById('vue-confirm').style.display='block'; }
+  function retourListe() { document.getElementById('vue-form').style.display='none'; document.getElementById('vue-liste').style.display='block'; }
+  document.getElementById('btnDeco').addEventListener('click', () => window.location.href='index.html');
+</script>
+</body>
+</html>

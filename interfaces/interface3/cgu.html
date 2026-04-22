@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conditions générales d'utilisation — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <span class="nom-site">L'assurance Maladie</span>
+    <span class="sous-titre">Votre espace personnel pour vos démarches de santé</span>
+  </div>
+  <button class="btn-deconnexion" id="btnDeconnexion">🔓 Me déconnecter</button>
+</header>
+
+<nav class="nav" role="navigation" aria-label="Navigation principale">
+  <a href="index.html"><span class="nav-icon">🏠</span> Accueil</a>
+  <a href="remboursements.html"><span class="nav-icon">💊</span> Remboursements</a>
+  <a href="demarches.html"><span class="nav-icon">📋</span> Mes démarches</a>
+  <a href="documents.html"><span class="nav-icon">📄</span> Mes documents</a>
+  <a href="informations.html"><span class="nav-icon">👤</span> Mes informations</a>
+</nav>
+
+<main>
+  <h1>Conditions Générales d'Utilisation (CGU)</h1>
+  <p class="intro-texte">Dernière mise à jour : 1er janvier 2026</p>
+
+  <div class="cgu-section">
+    <h2>1. Présentation du service</h2>
+    <p>Le présent service est proposé par l'Assurance Maladie (CNAM) afin de permettre aux assurés sociaux d'accéder à leur espace personnel en ligne. Il permet notamment de consulter ses remboursements, télécharger ses documents administratifs et effectuer des démarches de santé.</p>
+  </div>
+
+  <div class="cgu-section">
+    <h2>2. Conditions d'accès</h2>
+    <p>L'accès au service est réservé aux personnes physiques possédant un numéro d'assuré social actif et ayant créé un compte personnel sur le site ameli.fr. Toute utilisation frauduleuse est susceptible de faire l'objet de poursuites.</p>
+  </div>
+
+  <div class="cgu-section">
+    <h2>3. Protection des données personnelles</h2>
+    <p>Conformément au Règlement Général sur la Protection des Données (RGPD) et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification et de suppression de vos données personnelles. Pour exercer ces droits, vous pouvez contacter notre Délégué à la Protection des Données (DPO) à l'adresse : dpo@assurance-maladie.fr.</p>
+    <p>Les données collectées sont traitées dans le cadre strict de la gestion de votre dossier de santé et ne sont pas transmises à des tiers sans votre consentement explicite.</p>
+  </div>
+
+  <div class="cgu-section">
+    <h2>4. Sécurité et confidentialité</h2>
+    <p>Votre espace personnel est protégé par un identifiant et un mot de passe confidentiels. Vous êtes responsable de la confidentialité de vos identifiants. En cas de perte ou de vol, contactez immédiatement notre service client au 36 46.</p>
+  </div>
+
+  <div class="cgu-section">
+    <h2>5. Disponibilité du service</h2>
+    <p>L'Assurance Maladie s'efforce de maintenir le service accessible 24h/24 et 7j/7. Des interruptions pour maintenance peuvent survenir et seront signalées à l'avance dans la mesure du possible.</p>
+  </div>
+
+  <div class="cgu-section">
+    <h2>6. Responsabilité</h2>
+    <p>L'Assurance Maladie ne saurait être tenue responsable des dommages directs ou indirects résultant de l'utilisation du service, notamment en cas d'interruption technique indépendante de sa volonté.</p>
+  </div>
+
+  <div class="cgu-section">
+    <h2>7. Modification des CGU</h2>
+    <p>Les présentes conditions peuvent être modifiées à tout moment. Vous serez informé(e) de toute modification substantielle par message sur votre espace personnel.</p>
+  </div>
+
+  <a href="index.html" class="btn-secondaire" style="margin-top:16px; display:block; text-align:center; text-decoration:none; max-width:400px;">
+    ← Retour à l'accueil
+  </a>
+</main>
+
+<footer>
+  <div class="footer-num-secu">Votre numéro d'assuré : <strong>2 ** ** ** *** 123</strong></div>
+  <ul class="footer-liens">
+    <li><a href="cgu.html">Conditions générales d'utilisation</a></li>
+    <li><a href="#">Mentions légales</a></li>
+    <li><a href="#">Accessibilité</a></li>
+    <li><a href="#">Site d'Assurance Maladie</a></li>
+  </ul>
+</footer>
+
+<div class="modal-overlay" id="modalDeconnexion" role="dialog" aria-modal="true">
+  <div class="modal-boite">
+    <h2 class="modal-titre">⚠️ Confirmer votre action</h2>
+    <p class="modal-texte">Voulez-vous vraiment vous déconnecter ?</p>
+    <button class="btn-primaire" onclick="fermerModal()">✅ Oui, me déconnecter</button>
+    <button class="btn-secondaire" onclick="fermerModal()">✖ Non, rester connecté(e)</button>
+  </div>
+</div>
+
+<script>
+  document.getElementById('btnDeconnexion').addEventListener('click', () => document.getElementById('modalDeconnexion').classList.add('active'));
+  function fermerModal() { document.getElementById('modalDeconnexion').classList.remove('active'); }
+  document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('active'); }));
+  document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active')); });
+</script>
+
+</body>
+</html>

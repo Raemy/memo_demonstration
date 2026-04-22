@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vos documents — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-brand"><div class="nom-site">L'assurance Maladie</div><div class="sous-titre">Votre espace personnel en ligne</div></div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html">Démarches</a>
+  <a href="documents.html" class="active">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main>
+  <h1>Vos documents</h1>
+  <div class="doc-tabs" style="margin-top:16px;">
+    <button class="doc-tab" onclick="window.location.href='attestation.html'">Attestation de droits</button>
+    <button class="doc-tab">Attestation d'indemnités journalières</button>
+    <button class="doc-tab">Relevés mensuels</button>
+    <button class="doc-tab">Relevé fiscal</button>
+  </div>
+  <p class="intro-texte" style="color:#555;">Sélectionnez un document pour y accéder.</p>
+</main>
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> – <a href="#">Mentions légales</a> – <a href="#">Accessibilité</a> – <a href="#">Site d'Assurance Maladie</a>
+</footer>
+<script>document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });</script>
+</body>
+</html>

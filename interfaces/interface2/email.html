@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modifier mon adresse email — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="header">
+  <div class="header-brand"><div class="nom-site">L'assurance Maladie</div><div class="sous-titre">Votre espace personnel en ligne</div></div>
+  <button class="btn-deconnexion" id="btnDeco">Se déconnecter</button>
+</header>
+<nav class="nav">
+  <a href="index.html">Accueil</a>
+  <a href="remboursements.html">Frais de santé</a>
+  <a href="demarches.html" class="active">Démarches</a>
+  <a href="documents.html">Vos documents</a>
+  <a href="informations.html">Vos informations</a>
+  <a href="contact.html">Contact</a>
+</nav>
+<main>
+  <div class="breadcrumb"><a href="demarches.html">← Retour aux démarches</a></div>
+  <h1>Modifier mon adresse email</h1>
+
+  <div id="vue-form" style="margin-top:16px;">
+    <div class="champ-groupe">
+      <label class="champ-label">Nouvelle adresse email</label>
+      <input type="email" class="champ-input" placeholder="exemple@email.com">
+    </div>
+    <div class="champ-groupe">
+      <label class="champ-label">Confirmer l'adresse email</label>
+      <input type="email" class="champ-input" placeholder="exemple@email.com">
+    </div>
+    <div style="display:flex; gap:8px; margin-top:4px;">
+      <button class="btn-primaire" onclick="enregistrer()">Enregistrer la modification</button>
+      <button class="btn-secondaire" onclick="window.location.href='demarches.html'">Annuler</button>
+    </div>
+  </div>
+
+  <div id="vue-confirm" style="display:none; margin-top:16px;">
+    <div class="champ-groupe">
+      <label class="champ-label">Nouvelle adresse email</label>
+      <input type="email" class="champ-input" placeholder="exemple@email.com" disabled>
+    </div>
+    <div class="champ-groupe">
+      <label class="champ-label">Confirmer l'adresse email</label>
+      <input type="email" class="champ-input" placeholder="exemple@email.com" disabled>
+    </div>
+    <div style="display:flex; gap:8px; margin-top:4px;">
+      <button class="btn-secondaire" onclick="window.location.href='demarches.html'">Annuler</button>
+    </div>
+    <div class="alerte-succes" style="margin-top:12px;">Votre adresse email a bien été mise à jour.</div>
+  </div>
+</main>
+<footer>
+  <div class="footer-secu">Numéro de sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Conditions générales d'utilisation</a> – <a href="#">Mentions légales</a> – <a href="#">Accessibilité</a> – <a href="#">Site d'Assurance Maladie</a>
+</footer>
+<script>
+  function enregistrer() {
+    document.getElementById('vue-form').style.display='none';
+    document.getElementById('vue-confirm').style.display='block';
+  }
+  document.getElementById('btnDeco').addEventListener('click', () => { if(confirm('Se déconnecter ?')) alert('Déconnexion réussie.'); });
+</script>
+</body>
+</html>

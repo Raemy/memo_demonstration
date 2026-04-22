@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Délais de traitement — L'assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">
+    <span class="nom-site">L'assurance Maladie</span>
+    <span class="sous-titre">Votre espace personnel pour vos démarches de santé</span>
+  </div>
+  <button class="btn-deconnexion" id="btnDeconnexion">🔓 Me déconnecter</button>
+</header>
+
+<nav class="nav" role="navigation" aria-label="Navigation principale">
+  <a href="index.html"><span class="nav-icon">🏠</span> Accueil</a>
+  <a href="remboursements.html"><span class="nav-icon">💊</span> Remboursements</a>
+  <a href="demarches.html" class="active" aria-current="page"><span class="nav-icon">📋</span> Mes démarches</a>
+  <a href="documents.html"><span class="nav-icon">📄</span> Mes documents</a>
+  <a href="informations.html"><span class="nav-icon">👤</span> Mes informations</a>
+</nav>
+
+<main>
+
+  <!-- Vue formulaire -->
+  <div id="vue-formulaire">
+    <h1>Connaître les délais de traitement</h1>
+    <p class="intro-texte">Répondez aux deux questions ci-dessous pour connaître la date estimée de traitement de votre demande.</p>
+
+    <div class="champ-groupe">
+      <label class="champ-label" for="sujetDemande">1. Quel est le sujet de votre demande ?</label>
+      <select class="champ-select" id="sujetDemande" name="sujetDemande">
+        <option value="">— Choisissez une option —</option>
+        <option value="attestation">Télécharger mon attestation de droits</option>
+        <option value="ceam">Commander une CEAM</option>
+        <option value="medecin">Changer de médecin traitant</option>
+        <option value="remboursement">Demande de remboursement</option>
+        <option value="adresse">Changement d'adresse</option>
+        <option value="caisse">Changement de caisse d'Assurance Maladie</option>
+      </select>
+    </div>
+
+    <div class="champ-groupe">
+      <label class="champ-label" for="dateEnvoi">2. Quand avez-vous envoyé votre demande ?</label>
+      <input type="date" class="champ-input" id="dateEnvoi" value="2026-04-08">
+    </div>
+
+    <button class="btn-primaire" onclick="calculerDelais()">
+      ⏱️ Calculer le délai de traitement
+    </button>
+  </div>
+
+  <!-- Vue résultats -->
+  <div id="vue-resultats" style="display:none;">
+    <h1>Délais de traitement estimés</h1>
+
+    <button class="btn-secondaire" onclick="retourFormulaire()" style="margin-bottom:28px;">
+      ← Modifier ma demande
+    </button>
+
+    <div class="resultat-delais">
+      <div class="resultat-ligne">
+        <div class="resultat-label">📱 Si vous avez fait votre demande sur le site ameli :</div>
+        <div class="resultat-valeur">13 avril 2026</div>
+      </div>
+      <div class="resultat-ligne">
+        <div class="resultat-label">🏢 Si vous avez fait votre demande en agence ou par courrier :</div>
+        <div class="resultat-valeur">4 mai 2026</div>
+      </div>
+    </div>
+
+    <button class="btn-secondaire" onclick="retourFormulaire()">
+      🔄 Faire une nouvelle recherche
+    </button>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-num-secu">Votre numéro d'assuré : <strong>2 ** ** ** *** 123</strong></div>
+  <ul class="footer-liens">
+    <li><a href="cgu.html">Conditions générales d'utilisation</a></li>
+    <li><a href="#">Mentions légales</a></li>
+    <li><a href="#">Accessibilité</a></li>
+    <li><a href="#">Site d'Assurance Maladie</a></li>
+  </ul>
+</footer>
+
+<div class="modal-overlay" id="modalDeconnexion" role="dialog" aria-modal="true">
+  <div class="modal-boite">
+    <h2 class="modal-titre">⚠️ Confirmer votre action</h2>
+    <p class="modal-texte">Voulez-vous vraiment vous déconnecter ?</p>
+    <button class="btn-primaire" onclick="fermerModal()">✅ Oui, me déconnecter</button>
+    <button class="btn-secondaire" onclick="fermerModal()">✖ Non, rester connecté(e)</button>
+  </div>
+</div>
+
+<script>
+  function calculerDelais() {
+    document.getElementById('vue-formulaire').style.display = 'none';
+    document.getElementById('vue-resultats').style.display = 'block';
+    window.scrollTo(0,0);
+  }
+
+  function retourFormulaire() {
+    document.getElementById('vue-resultats').style.display = 'none';
+    document.getElementById('vue-formulaire').style.display = 'block';
+    window.scrollTo(0,0);
+  }
+
+  document.getElementById('btnDeconnexion').addEventListener('click', () => document.getElementById('modalDeconnexion').classList.add('active'));
+  function fermerModal() { document.getElementById('modalDeconnexion').classList.remove('active'); }
+  document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if(e.target===o) o.classList.remove('active'); }));
+  document.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-overlay.active').forEach(m=>m.classList.remove('active')); });
+</script>
+
+</body>
+</html>

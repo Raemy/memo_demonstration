@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assurance Maladie — Médecin traitant</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- HEADER : brand à droite, bouton déco à gauche (inversé par rapport à l'accueil) -->
+<div class="header" style="flex-direction:row-reverse;">
+  <span class="header-brand">Assurance Maladie</span>
+  <button class="btn-deconnexion" id="btnDeco">déconnecter</button>
+</div>
+<nav class="nav">
+  <a href="index.html">Accueil</a><span class="nav-sep">|</span>
+  <a href="services.html">Plan de santé</a><span class="nav-sep">|</span>
+  <a href="services.html">Service</a><span class="nav-sep">|</span>
+  <a href="demarches.html" class="active">Démarche</a><span class="nav-sep">|</span>
+  <a href="documents.html">Documents</a><span class="nav-sep">|</span>
+  <a href="compte.html">Compte</a><span class="nav-sep">|</span>
+  <a href="#">Aide</a><span class="nav-sep">|</span>
+  <a href="#">Contact</a><span class="nav-sep">|</span>
+  <a href="#">FAQ</a><span class="nav-sep">|</span>
+  <a href="cgu.html">Mentions Légales</a>
+</nav>
+<main>
+  <h1>Changer de médecin traitant</h1>
+  <p class="zone-info">Pour changer de médecin traitant, vous devez remplir le formulaire Cerfa n°12485 avec votre nouveau médecin lors de votre prochaine consultation. Le médecin transmet ensuite le formulaire à votre caisse.</p>
+  <p class="zone-info">Conséquences :</p>
+  <ul class="etapes-liste">
+    <li>Sans médecin traitant déclaré, vous serez moins bien remboursé(e).</li>
+    <li>Le changement prend effet dès réception du formulaire par votre caisse.</li>
+    <li>Vous pouvez changer de médecin traitant autant de fois que nécessaire.</li>
+  </ul>
+  <button class="btn-primaire" onclick="telecharger()">Télécharger le formulaire</button>
+  <span id="confirmDl" class="alerte-succes" style="display:none; margin-left:6px;">Formulaire Cerfa n°12485 en cours de téléchargement …</span>
+  <br><br>
+  <button class="btn-secondaire" onclick="window.location.href='demarches.html'">Retour</button>
+</main>
+<footer>
+  <div class="footer-secu">N° sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Mentions légales</a> <a href="cgu.html">CGU</a> Protection des données <a href="#">Gestion des cookies</a> <a href="#">Accessibilité</a><br>
+  © 2026 Administration Française – Version 3.2.1 build 20260315-1847 – Résolution recommandée 1920×1080
+</footer>
+<script>
+  function telecharger() { document.getElementById('confirmDl').style.display='inline'; }
+  document.getElementById('btnDeco').addEventListener('click', () => window.location.href='index.html');
+</script>
+</body>
+</html>

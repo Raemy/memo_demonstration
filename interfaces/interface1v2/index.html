@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assurance Maladie</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!-- PAS de Google Fonts — police condensée par défaut -->
+</head>
+<body>
+
+<!-- HEADER : bouton déco à gauche sur cette page (incohérence volontaire) -->
+<div class="header" style="justify-content:flex-start; gap:12px;">
+  <button class="btn-deconnexion" id="btnDeco">déconnexion</button>
+  <span class="header-brand">Assurance Maladie – Espace assuré</span>
+</div>
+
+<nav class="nav">
+  <a href="index.html" class="active">Accueil</a><span class="nav-sep">|</span>
+  <a href="services.html">Plan de santé</a><span class="nav-sep">|</span>
+  <a href="services.html">Service</a><span class="nav-sep">|</span>
+  <a href="demarches.html">Démarche</a><span class="nav-sep">|</span>
+  <a href="documents.html">Documents</a><span class="nav-sep">|</span>
+  <a href="compte.html">Compte</a><span class="nav-sep">|</span>
+  <a href="#">Aide</a><span class="nav-sep">|</span>
+  <a href="#">Contact</a><span class="nav-sep">|</span>
+  <a href="#">FAQ</a><span class="nav-sep">|</span>
+  <a href="cgu.html">Mentions Légales</a>
+</nav>
+
+<main>
+  <p class="intro-texte">Bienvenue sur le portail des services administratifs en ligne de l'administration française. Ce portail vous permet d'accéder à l'ensemble des services disponibles en ligne pour effectuer vos démarches administratives sans vous déplacer. Vous pouvez consulter vos documents, effectuer des demandes, suivre vos dossiers, prendre rendez-vous, payer vos factures et bien plus encore.</p>
+
+  <div class="bandeau-important">
+    Important : Pensez à vérifier régulièrement votre espace personnel pour ne manquer aucune information importante. Les notifications par email ne sont pas systématiques. En cas de changement de situation, vous devez nous en informer dans les 60h. Le non-respect de cette obligation peut entraîner des retenues dans le traitement de vos dossiers ou des remboursements selon que dit la réglementation en vigueur. Pour toute question, consultez notre FAQ ou contactez-nous aux horaires d'ouverture. Les demandes déposées après 16h30 sont traitées le jour ouvrable suivant.
+  </div>
+
+  <div class="accueil-grid">
+    <div class="widget">
+      <div class="widget-titre">Mes services rapides</div>
+      <p>Attestation de droits Consultez mes attestation de droits et la télécharger au format PDF pour la transmettre à un tiers <a href="documents.html">Cliquer ici</a></p>
+      <p>Relevé de remboursements <a href="remboursements.html">Accéder</a> à l'historique complet de vos remboursements sur les 12 derniers mois</p>
+      <p>Déclarer un changement de situation familiale ou professionnelle ayant un impact sur mes droits et mes cotisations avec documents justificatifs à fournir</p>
+      <button class="btn-primaire" onclick="window.location.href='remboursements.html'">Accéder</button>
+      <br><br>
+      <button class="btn-primaire" onclick="window.location.href='compte.html'">Valider</button>
+    </div>
+
+    <div class="widget">
+      <div class="widget-titre">Actualités et informations</div>
+      <p>15/01/2026 – Nouvelles modalités de remboursement à compter du 1er avril 2026 suite à la réforme des dispositifs de prise en charge. Consultez la notice applicative.</p>
+      <p>10/01/2026 – Mise à jour du système informatique prévue le mercredi 21 mars. Certains services seront temporairement indisponibles.</p>
+      <p>05/12/2025 – Campagne de prévention santé : prenez rendez-vous pour votre bilan de santé gratuit dans l'un de nos services agréés.</p>
+    </div>
+
+    <div class="widget">
+      <div class="widget-titre">Raccourcis</div>
+      <p>Prendre un rendez-vous</p>
+      <p>Effectuer un paiement</p>
+      <p>Déposer une réclamation</p>
+      <p>Nous contacter par téléphone</p>
+      <p>Envoyer un courrier</p>
+      <p><a href="#">Trouver une agence</a></p>
+    </div>
+
+    <div class="widget">
+      <div class="widget-titre">Mes alertes</div>
+      <p>3 notifications nécessitent votre attention immédiate</p>
+      <button class="btn-secondaire">Gérer</button>
+    </div>
+  </div>
+
+  <div class="col3" style="margin-top:6px;">
+    <div style="font-size:10px; border:1px solid #ccdde8; padding:4px; background:#eef4f8;">
+      <div style="font-weight:normal; font-size:10px; margin-bottom:2px; color:#aabbcc;">Vos démarches en cours (3)</div>
+      <p style="font-size:9px; color:#bbccdd; margin-bottom:2px;">Demande de remboursement n°2024-45678 déposée le 12/03/2026 - En cours de traitement - Délai estimé 15 jours - Documents complémentaires requis</p>
+      <p style="font-size:9px; color:#bbccdd; margin-bottom:2px;">Changement de RIB n°2024-45679 déposée le 10/03/2026 - Validée - Votre nouveau RIB sera pris en compte à partir du 25/03/2026</p>
+      <p style="font-size:9px; color:#bbccdd;">Mise à jour coordonnées n°2024-456880 déposée le 08/03/2026 - En attente de validation</p>
+    </div>
+    <div style="font-size:10px; border:1px solid #ccdde8; padding:4px; background:#eef4f8;">
+      <div style="font-weight:normal; font-size:10px; margin-bottom:2px; color:#aabbcc;">Mon RIB</div>
+      <p style="font-size:9px; color:#bbccdd;">Solde actuel : -125,50 EUR Échéance: 31/03/2026</p>
+      <p style="font-size:9px; color:#bbccdd;">Prochain: 25/02/2026 Agence Côte d'Azur</p>
+      <button class="btn-secondaire">Gérer</button>
+    </div>
+    <div style="font-size:10px; border:1px solid #ccdde8; padding:4px; background:#eef4f8;">
+      <div style="font-weight:normal; font-size:10px; margin-bottom:2px; color:#aabbcc;">Mes messages</div>
+      <p style="font-size:9px; color:#bbccdd;">5 nouveaux messages sont lus dans votre messagerie sécurisée</p>
+      <button class="btn-secondaire">Lire</button>
+    </div>
+  </div>
+
+  <div style="margin-top:4px; font-size:9px; color:#bbccdd; border:1px solid #ccdde8; padding:4px; background:#eef4f8;">
+    Rappel : Pensez à vérifier régulièrement votre espace personnel pour ne manquer aucune information importante. Les notifications par email ne sont pas systématiques. En cas de changement de situation, vous devez nous en informer dans les 60h. Le non-respect de cette obligation peut entraîner des retenues dans le traitement de vos dossiers ou des remboursements selon que dit la réglementation en vigueur. Pour toute question, consultez notre FAQ ou contactez-nous aux horaires d'ouverture.
+  </div>
+</main>
+
+<footer>
+  <div class="footer-secu">N° sécurité sociale : 2 ** ** ** *** 123</div>
+  <a href="cgu.html">Mentions légales</a> <a href="cgu.html">CGU</a> <a href="cgu.html">CGV</a> Protection des données <a href="#">Gestion des cookies</a> <a href="#">Accessibilité</a> <a href="#">Plan du site</a><br>
+  © 2026 Administration Française – Tous droits réservés – Version 3.2.1 build 20260315-1847 – Optimisé pour Internet Explorer 11, Firefox 52+, Chrome 80+, Safari 12+ – Résolution recommandée 1920×1080
+</footer>
+
+<script>
+  // Aucun feedback visuel sur le clic du bouton déco — juste navigation directe
+  document.getElementById('btnDeco').addEventListener('click', function() {
+    window.location.href = 'index.html';
+  });
+</script>
+
+</body>
+</html>
