@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fin - Plateforme v3</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">EXP <span>/ Session terminée</span></span>
+  <div class="topbar-info"><span class="badge active" id="badge-part">-</span></div>
+</div>
+
+<div class="container" style="max-width:700px;">
+
+  <div class="card" style="text-align:center;padding:36px;">
+    <div style="font-size:48px;margin-bottom:12px;">✅</div>
+    <div class="card-title" style="font-size:22px;">Session terminée</div>
+    <div class="card-subtitle" id="fin-info" style="font-size:14px;"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Récapitulatif</div>
+    <div class="grid2" style="margin-bottom:16px;">
+      <div class="stat-card"><div class="stat-val" id="s-total">-</div><div class="stat-label">Tâches</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-ok">-</div><div class="stat-label">Réussies</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-clics">-</div><div class="stat-label">Clics totaux</div></div>
+      <div class="stat-card"><div class="stat-val" id="s-q">-</div><div class="stat-label">Questionnaires</div></div>
+    </div>
+    <div id="recap-table" style="overflow-x:auto;"></div>
+  </div>
+
+  <div class="card">
+    <div class="section-label">Export des données</div>
+    <div class="card-subtitle" style="margin-bottom:12px;">Séparateur <code>;</code> · UTF-8 BOM · Compatible Jamovi / Excel / SPSS / R</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="Data.exportTaches()">⬇ Tâches CSV</button>
+      <button class="btn btn-primary" onclick="Data.exportQuestionnaires()">⬇ Questionnaires CSV</button>
+    </div>
+    <div class="alert alert-info" style="margin-top:12px;">
+      <strong>Jamovi :</strong> Fichier → Ouvrir → CSV → séparateur <em>point-virgule</em>.
+    </div>
+  </div>
+
+  <div style="text-align:center;">
+    <button class="btn btn-secondary" onclick="window.location.href='index.html'">← Nouveau participant</button>
+  </div>
+</div>
+
+<script src="scripts/main.js"></script>
+<script>
+  Data.load();
+  const code = State.participant.code;
+  document.getElementById('badge-part').textContent = code || '-';
+  if (code) document.getElementById('badge-part').classList.add('active');
+
+  const ok = State.donnees.filter(d=>d.reussite===1).length;
+  const clics = State.donnees.reduce((a,d)=>a+(parseInt(d.nombre_clics)||0),0);
+  const nQ = Object.keys(State.questionnaires.sus||{}).length + Object.keys(State.questionnaires.nasaTlxInterface||{}).length + Object.keys(State.questionnaires.nasaTlxTache||{}).length;
+
+  document.getElementById('fin-info').textContent = `${code} - ${State.participant.typeGroupe} ${State.participant.groupe} - ${DateFR.dateCourte()}`;
+  document.getElementById('s-total').textContent = State.donnees.length;
+  document.getElementById('s-ok').textContent = ok;
+  document.getElementById('s-clics').textContent = clics;
+  document.getElementById('s-q').textContent = nQ;
+
+  const hdrs = ['code_participant','date','groupe_participant','groupe_latin','interface_id','tache_id','type_tache','temps_secondes','nombre_clics','reussite'];
+  const el = document.getElementById('recap-table');
+  if (State.donnees.length) {
+    el.innerHTML = `<table class="data-table"><thead><tr>${hdrs.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
+      ${State.donnees.map(r=>`<tr>${hdrs.map(h=>`<td>${r[h]??'-'}</td>`).join('')}</tr>`).join('')}
+    </tbody></table>`;
+  }
+</script>
+</body>
+</html>

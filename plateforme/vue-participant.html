@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue Participant</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;overflow:hidden;background:#f4f6f9;font-family:'DM Sans',system-ui,sans-serif}
+    body{display:flex;flex-direction:column}
+
+    /* TOPBAR */
+    .vp-top{background:#1a1d23;color:#fff;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;height:44px}
+    .vp-top-l{font-size:12px;color:#9ca3af}.vp-top-l span{color:#fff;font-weight:700}
+    .vp-badges{display:flex;gap:8px;align-items:center}
+    .vp-badge{font-size:11px;padding:2px 9px;border-radius:20px;background:rgba(255,255,255,.08);color:#9ca3af;font-family:monospace}
+    .vp-badge.live{background:#16a34a;color:#fff;animation:pulse 2s infinite}
+    .vp-badge.training{background:#f59e0b;color:#fff}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+    /* ZONES PRINCIPALES */
+    .vp-main{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+
+    /* ÉCRAN ATTENTE */
+    #vp-waiting{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#6b7280}
+    #vp-waiting .w-icon{font-size:56px;opacity:.3}
+    #vp-waiting h2{font-size:18px;font-weight:600;color:#9ca3af}
+    #vp-waiting p{font-size:13px}
+
+    /* IFRAME */
+    #vp-iframe-wrap{flex:1;display:none;flex-direction:column}
+    #vp-iframe{flex:1;width:100%;border:none;display:block;height:100%}
+
+    /* QUESTIONNAIRE overlay (s'affiche par-dessus tout) */
+    #vp-questionnaire{display:none;position:absolute;inset:0;background:#f4f6f9;overflow-y:auto;z-index:100;padding:20px}
+
+    /* BARRE DU BAS */
+    .vp-bottom{background:#111827;border-top:1px solid #1f2937;padding:8px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;height:40px}
+    .vp-task-label{font-size:12px;color:#6b7280;max-width:50%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .vp-clics{display:flex;align-items:center;gap:8px;font-size:12px;color:#9ca3af}
+    .vp-clic-count{font-family:monospace;font-size:18px;font-weight:700;color:#60a5fa}
+    .vp-conn{display:flex;align-items:center;gap:6px;font-size:11px;color:#6b7280}
+    .conn-dot{width:8px;height:8px;border-radius:50%;background:#374151}
+    .conn-dot.ok{background:#22c55e}
+
+    /* QUESTIONNAIRE styles */
+    .q-container{max-width:700px;margin:0 auto}
+    .q-header{background:#1a1d23;color:#fff;border-radius:10px;padding:20px 24px;margin-bottom:20px}
+    .q-header h1{font-size:18px;font-weight:700;margin-bottom:4px}
+    .q-header p{font-size:13px;color:#9ca3af}
+    .q-step-dots{display:flex;gap:6px;margin-top:12px}
+    .q-dot{width:24px;height:6px;border-radius:3px;background:rgba(255,255,255,.2)}
+    .q-dot.done{background:#22c55e}.q-dot.active{background:#60a5fa}
+
+    /* SUS */
+    .sus-item{padding:14px;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;background:#fff}
+    .sus-question{font-size:14px;font-weight:500;margin-bottom:12px;line-height:1.5}
+    .sus-scale{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+    .sus-scale label{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;color:#6b7280;cursor:pointer;min-width:52px}
+    .sus-scale input[type=radio]{width:22px;height:22px;accent-color:#2563eb;cursor:pointer}
+    .sus-scale label:has(input:checked){color:#2563eb;font-weight:700}
+    .sus-global{width:100%;padding:12px;border:1.5px solid #d1d5db;border-radius:8px;font-size:15px;font-family:inherit;margin-top:4px}
+    .sus-global:focus{border-color:#2563eb;outline:3px solid rgba(37,99,235,.2)}
+
+    /* NASA slider */
+    .nasa-card{padding:16px;border:1px solid var(--border);border-radius:8px;margin-bottom:12px;background:#fff}
+    .nasa-dim{font-size:11px;font-family:monospace;background:#eff6ff;color:#2563eb;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:6px}
+    .nasa-desc{font-size:14px;font-weight:500;margin-bottom:14px;line-height:1.5}
+    .nasa-slider{width:100%;-webkit-appearance:none;height:8px;border-radius:4px;outline:none;cursor:pointer;border:none;background:linear-gradient(to right,#2563eb 0%,#2563eb var(--pct,50%),#e5e7eb var(--pct,50%),#e5e7eb 100%)}
+    .nasa-slider::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#2563eb;border:4px solid #fff;box-shadow:0 2px 8px rgba(37,99,235,.4);cursor:pointer}
+    .nasa-val{text-align:center;font-family:monospace;font-size:32px;font-weight:700;color:#2563eb;margin:8px 0}
+    .nasa-labels{display:flex;justify-content:space-between;font-size:11px;color:#9ca3af}
+    .nasa-ticks{display:flex;justify-content:space-between;font-size:10px;color:#d1d5db;padding:0 2px}
+
+    /* Séparateur tâche */
+    .tache-sep{background:#fefce8;border:1px solid #fcd34d;border-radius:8px;padding:12px 16px;margin:20px 0;font-size:13px;font-weight:600;color:#92400e}
+
+    /* Boutons */
+    .q-btn-next{width:100%;padding:16px;background:#2563eb;color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:16px;font-family:inherit;transition:background .15s}
+    .q-btn-next:hover{background:#1d4ed8}
+    .q-btn-back{width:100%;padding:14px;background:#fff;color:#374151;border:1.5px solid #d1d5db;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;margin-top:8px;font-family:inherit}
+    .q-btn-back:hover{background:#f9fafb}
+  </style>
+</head>
+<body>
+
+<div class="vp-top">
+  <div class="vp-top-l">Vue <span>Participant</span></div>
+  <div class="vp-badges">
+    <span class="vp-badge" id="vp-code">-</span>
+    <span class="vp-badge" id="vp-phase">En attente</span>
+    <span class="vp-badge live hidden" id="vp-live">● EN DIRECT</span>
+  </div>
+</div>
+
+<div class="vp-main">
+
+  <!-- ATTENTE -->
+  <div id="vp-waiting">
+    <div class="w-icon">⏳</div>
+    <h2>En attente de l'expérimentateur…</h2>
+    <p>Cette fenêtre se met à jour automatiquement.</p>
+    <p style="font-size:11px;margin-top:4px;color:#9ca3af;" id="vp-wait-info"></p>
+  </div>
+
+  <!-- INTERFACE (iframe) -->
+  <div id="vp-iframe-wrap">
+    <iframe id="vp-iframe" src="about:blank" title="Interface"></iframe>
+  </div>
+
+  <!-- QUESTIONNAIRES (overlay) -->
+  <div id="vp-questionnaire">
+    <div class="q-container">
+      <div class="q-header">
+        <h1 id="q-titre">Questionnaire</h1>
+        <p id="q-sous">-</p>
+        <div class="q-step-dots" id="q-dots"></div>
+      </div>
+      <div id="q-body"></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="vp-bottom">
+  <span class="vp-task-label" id="vp-task">-</span>
+  <div class="vp-clics">
+    <span style="font-size:11px;">Clics :</span>
+    <span class="vp-clic-count" id="vp-clic-num">0</span>
+  </div>
+  <div class="vp-conn"><span class="conn-dot" id="conn-dot"></span><span id="conn-txt">En attente</span></div>
+</div>
+
+<script src="scripts/main.js"></script>
+<script>
+  // ── Compteur de clics LOCAL (sur cette page) ──
+  let clicCount = 0;
+  function resetClics() { clicCount = 0; document.getElementById('vp-clic-num').textContent = 0; }
+
+  // Compter les clics dans l'iframe
+  function attachClicsIframe() {
+    const iframe = document.getElementById('vp-iframe');
+    const attach = doc => {
+      try {
+        doc.addEventListener('click', handleClic, true);
+        doc.addEventListener('touchstart', handleClic, true);
+      } catch(e) {}
+    };
+    try { attach(iframe.contentDocument); } catch(e) {}
+    iframe.addEventListener('load', () => {
+      try { attach(iframe.contentDocument); } catch(e) {}
+    });
+  }
+
+  function handleClic() {
+    clicCount++;
+    document.getElementById('vp-clic-num').textContent = clicCount;
+    // Envoyer le compte à la vue scientifique
+    Canal.envoyer({ type: 'clic_count', count: clicCount });
+  }
+
+  // ── Phases ──
+  let qStep = 0;
+  let qData = null;  // { ifaceId, tSimple, tComplexe }
+  let qAnswers = { sus:{}, nasaIface:{}, nasaS:{}, nasaC:{} };
+
+  function afficherAttente(msg) {
+    document.getElementById('vp-waiting').style.display = 'flex';
+    document.getElementById('vp-iframe-wrap').style.display = 'none';
+    document.getElementById('vp-questionnaire').style.display = 'none';
+    document.getElementById('vp-live').classList.add('hidden');
+    if (msg) document.getElementById('vp-phase').textContent = msg;
+  }
+
+  function afficherInterface(url, label, tache) {
+    document.getElementById('vp-waiting').style.display = 'none';
+    document.getElementById('vp-questionnaire').style.display = 'none';
+    const wrap = document.getElementById('vp-iframe-wrap');
+    wrap.style.display = 'flex';
+    document.getElementById('vp-live').classList.remove('hidden');
+    document.getElementById('vp-phase').textContent = label || '-';
+    document.getElementById('vp-task').textContent = tache || '-';
+    const iframe = document.getElementById('vp-iframe');
+    if (iframe.src !== url) { iframe.src = url; setTimeout(attachClicsIframe, 1000); }
+    else attachClicsIframe();
+  }
+
+  function afficherQuestionnaire(ifaceId) {
+    Data.load();
+    qData = { ifaceId };
+    // Trouver les tâches simple + complexe pour cette interface
+    qData.tSimple   = Object.values(TACHES_DEF).find(t => t.interface === ifaceId && t.type === 'simple');
+    qData.tComplexe = Object.values(TACHES_DEF).find(t => t.interface === ifaceId && t.type === 'complexe');
+    qAnswers = { sus:{}, nasaIface:{}, nasaS:{}, nasaC:{} };
+
+    document.getElementById('vp-waiting').style.display = 'none';
+    document.getElementById('vp-iframe-wrap').style.display = 'none';
+    document.getElementById('vp-questionnaire').style.display = 'block';
+    document.getElementById('vp-phase').textContent = 'Questionnaire';
+    document.getElementById('vp-live').classList.add('hidden');
+    document.getElementById('vp-task').textContent = `Questionnaire - ${INTERFACES[ifaceId]?.label || ifaceId}`;
+
+    afficherEtape(1);
+  }
+
+  function setDots(actif) {
+    document.getElementById('q-dots').innerHTML = [1,2,3].map(i =>
+      `<div class="q-dot ${i<actif?'done':i===actif?'active':''}"></div>`).join('');
+  }
+
+  function afficherEtape(etape) {
+    qStep = etape;
+    const iface = INTERFACES[qData.ifaceId] || {};
+    const titres = ['F-SUS', 'NASA-TLX Interface', 'NASA-TLX Tâches'];
+    const sous   = [`Évaluation de l'interface ${iface.shortLabel||''}`, `Charge cognitive sur l'interface`, `Charge cognitive sur les tâches (Simple + Complexe)`];
+    document.getElementById('q-titre').textContent = titres[etape-1];
+    document.getElementById('q-sous').textContent  = sous[etape-1];
+    setDots(etape);
+
+    if (etape === 1) renderSUS();
+    else if (etape === 2) renderNASAIface();
+    else if (etape === 3) renderNASATaches();
+    document.getElementById('vp-questionnaire').scrollTop = 0;
+  }
+
+  // ── F-SUS ──
+  function renderSUS() {
+    const iface = INTERFACES[qData.ifaceId] || {};
+    const html = SUS_QUESTIONS.map((q,i) => `
+      <div class="sus-item">
+        <div class="sus-question"><strong>Q${i+1}.</strong> ${q}</div>
+        <div class="sus-scale">
+          ${[1,2,3,4,5].map(v=>`<label>
+            <input type="radio" name="sus_${i+1}" value="${v}" ${qAnswers.sus[`q${i+1}`]==v?'checked':''}>
+            <span>${v}</span>
+          </label>`).join('')}
+        </div>
+        <div class="sus-labels" style="display:flex;justify-content:space-between;font-size:11px;color:#9ca3af;margin-top:6px;">
+          <span>Pas du tout d'accord</span><span>Tout à fait d'accord</span>
+        </div>
+      </div>`).join('') +
+      `<div class="sus-item">
+        <div class="sus-question">Dans l'ensemble, je qualifierais la convivialité de <strong>${iface.label||''}</strong> de…</div>
+        <select class="sus-global" id="sus-global-vp">
+          <option value="">- Sélectionner -</option>
+          ${[['1','La pire qu\'on puisse imaginer'],['2','Mauvaise'],['3','Acceptable'],['4','Bonne'],['5','Excellente'],['6','La meilleure qu\'on puisse imaginer']]
+            .map(([v,l])=>`<option value="${v}" ${qAnswers.sus.global===v?'selected':''}>${v} - ${l}</option>`).join('')}
+        </select>
+      </div>` +
+      `<button class="q-btn-next" onclick="sauvegarderSUS()">Suivant →</button>`;
+    document.getElementById('q-body').innerHTML = html;
+  }
+
+  function sauvegarderSUS() {
+    const sus = { global: document.getElementById('sus-global-vp')?.value || '' };
+    SUS_QUESTIONS.forEach((_,i) => { const c=document.querySelector(`input[name="sus_${i+1}"]:checked`); sus[`q${i+1}`]=c?c.value:''; });
+    qAnswers.sus = sus;
+    afficherEtape(2);
+  }
+
+  // ── NASA-TLX Interface ──
+  function renderNASAIface() {
+    const html = NASA_DIMENSIONS.map(dim => nasaCard(`ni_${dim.id}`, dim, qAnswers.nasaIface[dim.id])).join('') +
+      `<button class="q-btn-next" onclick="sauvegarderNASAIface()">Suivant →</button>
+       <button class="q-btn-back" onclick="afficherEtape(1)">← Retour</button>`;
+    document.getElementById('q-body').innerHTML = html;
+  }
+
+  function sauvegarderNASAIface() {
+    const nasa = {};
+    NASA_DIMENSIONS.forEach(dim => { const el=document.querySelector(`input[name="ni_${dim.id}"]`); nasa[dim.id]=el?parseInt(el.value):10; });
+    qAnswers.nasaIface = nasa;
+    afficherEtape(3);
+  }
+
+  // ── NASA-TLX Tâches ──
+  function renderNASATaches() {
+    const ts = qData.tSimple, tc = qData.tComplexe;
+    let html = '';
+    if (ts) {
+      html += `<div class="tache-sep">⬡ Tâche simple - ${ts.label}</div>` +
+        NASA_DIMENSIONS.map(dim => nasaCard(`nt_s_${dim.id}`, dim, qAnswers.nasaS[dim.id])).join('');
+    }
+    if (tc) {
+      html += `<div class="tache-sep" style="background:#fdf2f8;border-color:#f0abfc;color:#7e22ce;">⬢ Tâche complexe - ${tc.label}</div>` +
+        NASA_DIMENSIONS.map(dim => nasaCard(`nt_c_${dim.id}`, dim, qAnswers.nasaC[dim.id])).join('');
+    }
+    html += `<button class="q-btn-next" onclick="finaliserQuestionnaire()">✓ Valider et continuer →</button>
+             <button class="q-btn-back" onclick="afficherEtape(2)">← Retour</button>`;
+    document.getElementById('q-body').innerHTML = html;
+  }
+
+  function nasaCard(name, dim, savedVal) {
+    const v = savedVal !== undefined ? savedVal : 10;
+    const pct = (v/20)*100;
+    return `<div class="nasa-card">
+      <span class="nasa-dim">${dim.label}</span>
+      <div class="nasa-desc">${dim.desc}</div>
+      <input type="range" class="nasa-slider" name="${name}" min="0" max="20" step="1" value="${v}"
+        style="--pct:${pct}%"
+        oninput="this.style.setProperty('--pct',(this.value/20*100)+'%');document.getElementById('nv-${name}').textContent=this.value">
+      <div class="nasa-ticks">${Array.from({length:5},(_,i)=>`<span>${i*5}</span>`).join('')}</div>
+      <div class="nasa-val" id="nv-${name}">${v}</div>
+      <div class="nasa-labels"><span>Très faible (0)</span><span>Très élevé (20)</span></div>
+    </div>`;
+  }
+
+  function finaliserQuestionnaire() {
+    // NASA tâche simple
+    if (qData.tSimple) {
+      const nasaS = {};
+      NASA_DIMENSIONS.forEach(dim => { const el=document.querySelector(`input[name="nt_s_${dim.id}"]`); nasaS[dim.id]=el?parseInt(el.value):10; });
+      qAnswers.nasaS = nasaS;
+    }
+    // NASA tâche complexe
+    if (qData.tComplexe) {
+      const nasaC = {};
+      NASA_DIMENSIONS.forEach(dim => { const el=document.querySelector(`input[name="nt_c_${dim.id}"]`); nasaC[dim.id]=el?parseInt(el.value):10; });
+      qAnswers.nasaC = nasaC;
+    }
+
+    // Sauvegarder dans State + localStorage
+    Data.load();
+    if (!State.questionnaires.sus) State.questionnaires.sus = {};
+    if (!State.questionnaires.nasaTlxInterface) State.questionnaires.nasaTlxInterface = {};
+    if (!State.questionnaires.nasaTlxTache) State.questionnaires.nasaTlxTache = {};
+
+    State.questionnaires.sus[qData.ifaceId] = qAnswers.sus;
+    State.questionnaires.nasaTlxInterface[qData.ifaceId] = qAnswers.nasaIface;
+    if (qData.tSimple)   State.questionnaires.nasaTlxTache[qData.tSimple.id]   = qAnswers.nasaS;
+    if (qData.tComplexe) State.questionnaires.nasaTlxTache[qData.tComplexe.id] = qAnswers.nasaC;
+    Data.save();
+
+    // Signaler à la vue scientifique que les questionnaires sont finis
+    Canal.envoyer({ type: 'questionnaires_finis', ifaceId: qData.ifaceId });
+    afficherAttente('Questionnaire terminé…');
+  }
+
+  // ── Écouter le canal ──
+  Canal.init();
+  Canal.ecouter(msg => {
+    if (!msg || !msg.type) return;
+    document.getElementById('conn-dot').classList.add('ok');
+    document.getElementById('conn-txt').textContent = 'Connecté';
+
+    if (msg.type === 'interface') {
+      resetClics();
+      afficherInterface(msg.url, msg.label, msg.tache);
+    } else if (msg.type === 'questionnaire_interface') {
+      resetClics();
+      afficherQuestionnaire(msg.ifaceId);
+    } else if (msg.type === 'entrainement_debut') {
+      resetClics();
+      afficherInterface(msg.url, 'Entraînement', msg.tache);
+      document.getElementById('vp-phase').textContent = 'Entraînement';
+      const phaseBadge = document.getElementById('vp-live');
+      phaseBadge.textContent = '🏋 ENTRAÎNEMENT'; phaseBadge.classList.remove('hidden');
+      phaseBadge.style.background = '#f59e0b';
+    } else if (msg.type === 'fin_entrainement') {
+      afficherAttente('Entraînement terminé - Expérience principale dans quelques instants…');
+    } else if (msg.type === 'reset_clics') {
+      resetClics();
+    } else if (msg.type === 'fin') {
+      afficherAttente('Session terminée - Merci !');
+      document.getElementById('vp-wait-info').textContent = '';
+      document.querySelector('.w-icon').textContent = '✅';
+      document.querySelector('#vp-waiting h2').textContent = 'Session terminée - Merci !';
+    }
+  });
+
+  // Init depuis localStorage
+  Data.load();
+  const p = State.participant;
+  if (p.code) {
+    document.getElementById('vp-code').textContent = p.code;
+    document.getElementById('vp-wait-info').textContent = `Participant : ${p.code} · ${p.typeGroupe||''} ${p.groupe||''}`;
+  }
+</script>
+</body>
+</html>
