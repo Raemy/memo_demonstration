@@ -1,14 +1,14 @@
 /* ===== PLATEFORME EXPÉRIMENTALE v4 ===== */
 
 const INTERFACES = {
-  A: { id:'A', label:'Interface non ergonomique',     shortLabel:'Non-ergo', url:'../interfaces/interface1v2/index.html', couleur:'#dc2626' },
-  B: { id:'B', label:'Interface ergonomique standard', shortLabel:'Standard', url:'../interfaces/interface2/index.html',  couleur:'#d97706' },
-  C: { id:'C', label:'Interface senior-friendly',     shortLabel:'Senior',   url:'../interfaces/interface3/index.html',  couleur:'#16a34a' }
+  A: { id:'A', label:'Interface non ergonomique',     shortLabel:'Non-ergo', url:'../interface1v2/index.html', couleur:'#dc2626' },
+  B: { id:'B', label:'Interface ergonomique standard', shortLabel:'Standard', url:'../interface2/index.html',  couleur:'#d97706' },
+  C: { id:'C', label:'Interface senior-friendly',     shortLabel:'Senior',   url:'../interface3/index.html',  couleur:'#16a34a' }
 };
 
 const TACHES_DEF = {
   S1:{ id:'S1', interface:'A', type:'simple',   label:'Trouver le numéro d\'assurance maladie', enonce:'Trouvez votre numéro d\'assurance maladie sur cette interface.', reponse:'Le numéro se trouve dans le footer (bas de page).', validation:'auto' },
-  C1:{ id:'C1', interface:'A', type:'complexe', label:'Retrouver le dernier remboursement', enonce:'Vous avez consulté plusieurs spécialistes ce mois-ci. Retrouvez les détails de votre dernier remboursement.', reponse:'8 avril 2026 - 17,50 € - médecin généraliste - taux 70% - base 25€', validation:'oral' },
+  C1:{ id:'C1', interface:'A', type:'complexe', label:'Retrouver le dernier remboursement', enonce:'Vous avez consulté plusieurs spécialistes ce mois-ci. Retrouvez les détails de votre dernier remboursement.', reponse:'8 avril 2026 — 17,50 € — médecin généraliste — taux 70% — base 25€', validation:'oral' },
   S2:{ id:'S2', interface:'B', type:'simple',   label:'Modifier l\'adresse email', enonce:'Modifiez votre adresse email.', reponse:'Bouton "Enregistrer la modification" → confirmation verte.', validation:'auto' },
   C2:{ id:'C2', interface:'B', type:'complexe', label:'Changer de médecin traitant', enonce:'Vous voulez changer de médecin traitant. Trouvez comment faire et précisez quel est le dernier bouton pour exécuter votre tâche.', reponse:'"Télécharger le formulaire Cerfa n°12485"', validation:'oral' },
   S3:{ id:'S3', interface:'C', type:'simple',   label:'Commander la CEAM', enonce:'Commandez une Carte Européenne d\'Assurance Maladie (CEAM).', reponse:'Bouton "Commander ma CEAM" → confirmation.', validation:'auto' },
@@ -281,16 +281,86 @@ const Utils = {
   html: (id,v) => { const e=document.getElementById(id); if(e) e.innerHTML=v; }
 };
 
-// ─── CANAL DE COMMUNICATION (BroadcastChannel + localStorage fallback) ───
+// ─── CANAL DE COMMUNICATION — Firebase Realtime Database ───
+// Fonctionne entre appareils différents sur le réseau
+const FIREBASE_CONFIG = {
+  apiKey:            "AIzaSyD3T8SiUf0nhGVBCQm5C9uTFNO9wjilhUM",
+  authDomain:        "memo-ergo.firebaseapp.com",
+  databaseURL:       "https://memo-ergo-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:         "memo-ergo",
+  storageBucket:     "memo-ergo.firebasestorage.app",
+  messagingSenderId: "426619826169",
+  appId:             "1:426619826169:web:95efaa9d0ae766b64b1728"
+};
+
 const Canal = {
-  bc: null,
+  db: null,          // référence Firebase Database
   handlers: [],
-  init() {
+  sessionKey: '',    // clé unique par session = code participant
+
+  // ── Initialisation ──
+  async init(codeParticipant) {
+    Canal.sessionKey = codeParticipant || State.participant.code || 'default';
+
+    try {
+      // Chargement dynamique du SDK Firebase (CDN, pas d'installation)
+      const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+      const { getDatabase, ref, set, onValue, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js');
+
+      // Initialiser Firebase une seule fois
+      const app = getApps().length ? getApps()[0] : initializeApp(FIREBASE_CONFIG);
+      Canal.db = getDatabase(app);
+
+      // Stocker les fonctions Firebase pour utilisation ultérieure
+      Canal._ref           = ref;
+      Canal._set           = set;
+      Canal._onValue       = onValue;
+      Canal._serverTs      = serverTimestamp;
+
+      // Écouter les messages entrants sur la clé de session
+      const msgRef = ref(Canal.db, `sessions/${Canal.sessionKey}/canal`);
+      let lastTs = 0;
+      onValue(msgRef, snapshot => {
+        const data = snapshot.val();
+        if (!data || !data._ts) return;
+        if (data._ts <= lastTs) return; // ignorer les anciens messages
+        lastTs = data._ts;
+        Canal._dispatch(data);
+      });
+
+      console.log(`✅ Firebase connecté — session : ${Canal.sessionKey}`);
+    } catch(e) {
+      console.warn('Firebase indisponible, fallback localStorage :', e);
+      Canal._initFallback();
+    }
+  },
+
+  // ── Envoi d'un message ──
+  envoyer(msg) {
+    const full = { ...msg, _ts: Date.now(), _code: Canal.sessionKey };
+
+    // Firebase (cross-appareils)
+    if (Canal.db && Canal._ref && Canal._set) {
+      try {
+        Canal._set(Canal._ref(Canal.db, `sessions/${Canal.sessionKey}/canal`), full);
+      } catch(e) { console.warn('Firebase send error:', e); }
+    }
+
+    // Fallback localStorage (même appareil)
+    try { localStorage.setItem('exp_v4_canal_msg', JSON.stringify(full)); } catch(e) {}
+    if (typeof BroadcastChannel !== 'undefined' && Canal.bc) Canal.bc.postMessage(full);
+  },
+
+  // ── Abonnement ──
+  ecouter(cb) { Canal.handlers.push(cb); },
+  _dispatch(msg) { Canal.handlers.forEach(h => { try { h(msg); } catch(e){} }); },
+
+  // ── Fallback sans Firebase ──
+  _initFallback() {
     if (typeof BroadcastChannel !== 'undefined') {
       Canal.bc = new BroadcastChannel('exp_v4_canal');
       Canal.bc.onmessage = e => Canal._dispatch(e.data);
     }
-    // Polling localStorage pour cross-window / cross-browser
     let lastTs = 0;
     setInterval(() => {
       try {
@@ -299,15 +369,10 @@ const Canal = {
         const msg = JSON.parse(raw);
         if (msg._ts > lastTs) { lastTs = msg._ts; Canal._dispatch(msg); }
       } catch(e) {}
-    }, 200);
+    }, 300);
   },
-  envoyer(msg) {
-    const full = { ...msg, _ts: Date.now() };
-    if (Canal.bc) Canal.bc.postMessage(full);
-    try { localStorage.setItem('exp_v4_canal_msg', JSON.stringify(full)); } catch(e) {}
-  },
-  ecouter(cb) { Canal.handlers.push(cb); },
-  _dispatch(msg) { Canal.handlers.forEach(h => h(msg)); }
+
+  bc: null
 };
 
 // ─── EXPORTS ───

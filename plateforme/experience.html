@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expérience - Plateforme v4</title>
+  <title>Expérience — Plateforme v4</title>
   <link rel="stylesheet" href="styles/main.css">
   <style>
     .exp-layout{display:grid;grid-template-columns:290px 1fr;gap:12px;align-items:start}
@@ -22,9 +22,9 @@
 <div class="topbar">
   <span class="topbar-brand">EXP <span>/ Vue Scientifique</span></span>
   <div class="topbar-info">
-    <span class="badge active" id="badge-part">-</span>
-    <span class="badge" id="badge-iface">-</span>
-    <span class="badge" id="badge-tache">-</span>
+    <span class="badge active" id="badge-part">—</span>
+    <span class="badge" id="badge-iface">—</span>
+    <span class="badge" id="badge-tache">—</span>
   </div>
 </div>
 
@@ -39,11 +39,11 @@
         <!-- Info tâche -->
         <div class="card" style="padding:14px;margin-bottom:0;">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;" id="iface-badge">-</span>
+            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;" id="iface-badge">—</span>
             <span style="font-size:11px;color:var(--text-muted);" id="tache-prog">0/6</span>
           </div>
-          <div style="font-size:13px;font-weight:700;" id="tache-nom">-</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;" id="tache-type">-</div>
+          <div style="font-size:13px;font-weight:700;" id="tache-nom">—</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;" id="tache-type">—</div>
           <div style="display:flex;gap:3px;margin-top:10px;flex-wrap:wrap;" id="step-dots"></div>
         </div>
 
@@ -76,7 +76,7 @@
         <!-- Énoncé -->
         <div class="card" style="padding:14px;margin-bottom:0;">
           <div class="section-label" style="margin-bottom:6px;">Énoncé (lu à voix haute)</div>
-          <div style="background:var(--warning-light);border:1.5px solid #fcd34d;border-radius:var(--radius-sm);padding:12px;font-size:13px;line-height:1.6;" id="task-enonce">-</div>
+          <div style="background:var(--warning-light);border:1.5px solid #fcd34d;border-radius:var(--radius-sm);padding:12px;font-size:13px;line-height:1.6;" id="task-enonce">—</div>
           <div id="oral-wrap"></div>
           <div id="reponse-wrap" class="hidden" style="font-size:12px;background:var(--surface2);border-radius:4px;padding:8px;font-family:var(--mono);margin-top:8px;"></div>
         </div>
@@ -104,13 +104,13 @@
 
       </div>
 
-      <!-- IFRAME (miroir de la vue participant - lecture seule) -->
+      <!-- IFRAME (miroir de la vue participant — lecture seule) -->
       <div>
         <div class="interface-frame-wrap">
           <div class="interface-frame-bar">
             <div class="frame-dot red"></div><div class="frame-dot yellow"></div><div class="frame-dot green"></div>
-            <div class="frame-url" id="frame-url">-</div>
-            <span style="font-size:10px;color:#6b7280;margin-left:auto;">(miroir - les clics sont comptés sur l'écran du participant)</span>
+            <div class="frame-url" id="frame-url">—</div>
+            <span style="font-size:10px;color:#6b7280;margin-left:auto;">(miroir — les clics sont comptés sur l'écran du participant)</span>
           </div>
           <iframe class="iface" id="interface-iframe" src="about:blank" title="Aperçu interface"></iframe>
         </div>
@@ -126,8 +126,8 @@
       <div class="card-title">✓ Toutes les tâches réalisées</div>
       <div class="card-subtitle" id="fin-recap"></div>
       <div class="grid2" style="margin:16px 0;">
-        <div class="stat-card"><div class="stat-val" id="fin-total">-</div><div class="stat-label">Tâches</div></div>
-        <div class="stat-card"><div class="stat-val" id="fin-ok">-</div><div class="stat-label">Réussies</div></div>
+        <div class="stat-card"><div class="stat-val" id="fin-total">—</div><div class="stat-label">Tâches</div></div>
+        <div class="stat-card"><div class="stat-val" id="fin-ok">—</div><div class="stat-label">Réussies</div></div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="Data.exportTaches()">⬇ Export tâches CSV</button>
@@ -142,10 +142,10 @@
 <script src="scripts/main.js"></script>
 <script>
   Data.load();
-  Canal.init();
+  Canal.init(State.participant.code);
 
   const code = State.participant.code;
-  document.getElementById('badge-part').textContent = code || '-';
+  document.getElementById('badge-part').textContent = code || '—';
   if (code) document.getElementById('badge-part').classList.add('active');
 
   // Reconstruire séquence si besoin
@@ -197,7 +197,7 @@
     const oralWrap = document.getElementById('oral-wrap');
     const repWrap  = document.getElementById('reponse-wrap');
     if (t.validation === 'oral') {
-      oralWrap.innerHTML = '<div class="oral-note">🎤 <strong>Validation orale</strong> - Écoutez la réponse du participant.</div>';
+      oralWrap.innerHTML = '<div class="oral-note">🎤 <strong>Validation orale</strong> — Écoutez la réponse du participant.</div>';
       repWrap.classList.add('hidden');
     } else {
       oralWrap.innerHTML = '';
@@ -224,7 +224,7 @@
     Utils.hide('validation-attente');
 
     // Envoyer à la vue participant
-    Canal.envoyer({ type: 'interface', url: iface.url, label: iface.label, tache: `${idx+1}/6 - ${t.label}` });
+    Canal.envoyer({ type: 'interface', url: iface.url, label: iface.label, tache: `${idx+1}/6 — ${t.label}` });
   }
 
   function dChrono() { Chrono.start(); document.getElementById('btn-start').disabled=true; document.getElementById('btn-stop').disabled=false; }
@@ -263,7 +263,7 @@
     const ok = State.donnees.filter(d=>d.reussite===1).length;
     document.getElementById('fin-total').textContent = State.donnees.length;
     document.getElementById('fin-ok').textContent = ok;
-    document.getElementById('fin-recap').textContent = `${code} - ${State.participant.typeGroupe} ${State.participant.groupe} - ${DateFR.dateCourte()}`;
+    document.getElementById('fin-recap').textContent = `${code} — ${State.participant.typeGroupe} ${State.participant.groupe} — ${DateFR.dateCourte()}`;
     Canal.envoyer({ type: 'fin' });
   }
 
