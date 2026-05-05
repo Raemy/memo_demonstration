@@ -3,34 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>✅ Entraînement - Plateforme v5</title>
+  <title>Entraînement - Plateforme</title>
   <link rel="stylesheet" href="styles/main.css">
   <style>
-    /* Layout principal : panneau gauche + iframe
-    .exp-layout{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:start}
+    /* Layout principal : panneau gauche + iframe */
+    .exp-layout{display:grid;grid-template-columns:260px 1fr;gap:12px;align-items:start}
     .sidebar-exp{position:sticky;top:52px;display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 70px);overflow-y:auto}
-    iframe.iface{width:100%;height:calc(100vh - 120px);min-height:600px;border:none;display:block}.exp-layout {
-  display: grid;
-  grid-template-columns: 180px minmax(0, 1fr);
-  gap: 12px;
-} */
-
-/* Quand l'écran devient petit */
-@media (max-width: 900px) {
-  .exp-layout {
-    grid-template-columns: 1fr; /* empilement */
-  }
-
-  .sidebar-exp {
-    position: static; /* enlève le sticky */
-    max-height: none;
-    overflow: visible;
-  }
-
-  iframe.iface {
-    height: 70vh; 
-  }
-}
+    iframe.iface{width:100%;height:calc(100vh - 120px);min-height:600px;border:none;display:block}
 
     /* Chrono */
     .chrono-display{font-family:var(--mono);font-size:34px;font-weight:500;color:var(--text);text-align:center;

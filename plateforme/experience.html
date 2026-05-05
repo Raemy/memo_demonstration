@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expérience - Plateforme v5</title>
+  <title>Expérience - Plateforme</title>
   <link rel="stylesheet" href="styles/main.css">
   <style>
     .exp-layout{display:grid;grid-template-columns:260px 1fr;gap:12px;align-items:start}
@@ -103,7 +103,7 @@
 
         <!-- ══ ÉTAPE 1 : CONSIGNE (toujours visible) ══ -->
         <div class="card" style="padding:14px;margin-bottom:0;">
-          <div class="etape-badge etape-1">① Consigne — lisez à voix haute</div>
+          <div class="etape-badge etape-1">① Consigne -lisez à voix haute</div>
           <div class="consigne-box" id="task-enonce">-</div>
           <div id="oral-wrap"></div>
           <div id="reponse-wrap" class="hidden"
@@ -122,7 +122,7 @@
 
           <!-- Banner "en cours" visible après déclenchement -->
           <div class="etat-en-cours" id="etat-en-cours">
-            ⏱ Tâche en cours — le participant travaille
+            ⏱ Tâche en cours -le participant travaille
           </div>
 
           <!-- Chrono -->
@@ -182,7 +182,7 @@
           </div>
           <iframe class="iface" id="interface-iframe" src="about:blank" title="Interface participant"></iframe>
         </div>
-        <!-- Zone questionnaire participant (numérique) — recouvre l'iframe -->
+        <!-- Zone questionnaire participant (numérique) -recouvre l'iframe -->
         <div id="zone-participant-questionnaire" class="hidden"
           style="background:var(--surface);border:2px solid var(--accent);border-radius:var(--radius);
                  padding:24px;max-height:calc(100vh - 120px);overflow-y:auto;min-height:400px;">
@@ -198,7 +198,7 @@
             Attendez qu'il ait terminé avant de continuer.
           </p>
           <button class="btn btn-primary" onclick="continuerApresPapier()" style="font-size:15px;padding:12px 32px;">
-            ✓ Questionnaires remplis — Continuer →
+            ✓ Questionnaires remplis -Continuer →
           </button>
         </div>
       </div>
@@ -391,7 +391,7 @@
     else chargerTache(_rappelNextIdx);
   }
 
-  // ── Questionnaire participant (numérique) — affiché côté participant ──
+  // ── Questionnaire participant (numérique) -affiché côté participant ──
   let _qNextIdx = 0;
   function afficherQuestionnaireParticipant(ifaceId, nextIdx) {
     _qNextIdx = nextIdx;
@@ -414,7 +414,7 @@
     const iface = INTERFACES[ifaceId];
     let html = `<div style="max-width:700px;margin:0 auto;">
       <div style="font-size:18px;font-weight:700;margin-bottom:4px;color:${iface.couleur};">
-        📋 Questionnaires — Interface ${iface.label}
+        📋 Questionnaires -Interface ${iface.label}
       </div>
       <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">
         Répondez à chaque question selon votre ressenti lors de l'utilisation de cette interface.
@@ -422,7 +422,7 @@
 
       <div style="font-size:13px;font-weight:700;margin-bottom:12px;text-transform:uppercase;
                   letter-spacing:.04em;padding:8px 12px;background:#dbeafe;border-radius:6px;color:#1e40af;">
-        F-SUS — Échelle d'utilisabilité (1 = Pas du tout d'accord · 5 = Tout à fait d'accord)
+        F-SUS -Échelle d'utilisabilité (1 = Pas du tout d'accord · 5 = Tout à fait d'accord)
       </div>`;
 
     SUS_QUESTIONS.forEach((q,i) => {
@@ -464,12 +464,12 @@
             </div>
           </label>`).join('')}
       </div>
-      <div id="sus_${ifaceId}_global_val" style="font-size:11px;color:var(--text-muted);margin-top:4px;text-align:center;">— Non sélectionné —</div>
+      <div id="sus_${ifaceId}_global_val" style="font-size:11px;color:var(--text-muted);margin-top:4px;text-align:center;">-Non sélectionné —</div>
     </div>
 
     <div style="font-size:13px;font-weight:700;margin:20px 0 12px;text-transform:uppercase;
                 letter-spacing:.04em;padding:8px 12px;background:#dcfce7;border-radius:6px;color:#14532d;">
-      NASA-TLX — Charge de travail sur l'interface (0 = Très faible · 20 = Très élevé)
+      NASA-TLX -Charge de travail sur l'interface (0 = Très faible · 20 = Très élevé)
     </div>`;
 
     NASA_DIMENSIONS.forEach(dim => {
@@ -489,7 +489,7 @@
     // NASA-TLX général pour les tâches (pas par tâche individuelle)
     html += `<div style="font-size:13px;font-weight:700;margin:20px 0 12px;text-transform:uppercase;
                 letter-spacing:.04em;padding:8px 12px;background:#f3e8ff;border-radius:6px;color:#6b21a8;">
-      NASA-TLX — Charge de travail sur les tâches (0 = Très faible · 20 = Très élevé)
+      NASA-TLX -Charge de travail sur les tâches (0 = Très faible · 20 = Très élevé)
     </div>
     <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
       De manière générale, évaluez la charge de travail ressentie lors des tâches réalisées sur cette interface.
