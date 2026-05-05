@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entraînement — Plateforme v4</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    .exp-layout{display:grid;grid-template-columns:280px 1fr;gap:12px;align-items:start}
+    .sidebar-exp{position:sticky;top:52px;display:flex;flex-direction:column;gap:10px}
+    .chrono-display{font-family:var(--mono);font-size:34px;font-weight:500;color:var(--text);text-align:center;padding:10px;background:var(--surface2);border-radius:var(--radius);border:2px solid var(--border);letter-spacing:.05em;transition:color .3s,border-color .3s}
+    .chrono-display.running{color:#f59e0b;border-color:#f59e0b}
+    .chrono-display.stopped{color:var(--success);border-color:var(--success)}
+    .training-badge{background:#f59e0b;color:#fff;font-size:11px;font-family:var(--mono);padding:3px 10px;border-radius:20px;display:inline-block}
+    /* Côté expérimentateur : on montre un résumé de l'interface, pas l'iframe */
+    .iface-preview{background:var(--surface2);border:1.5px dashed var(--border);border-radius:var(--radius);padding:32px;text-align:center;color:var(--text-muted);font-size:14px}
+    .iface-preview .iface-name{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px}
+    .iface-preview .iface-note{font-size:12px;margin-top:12px;color:#9ca3af;}
+    @media(max-width:900px){.exp-layout{grid-template-columns:1fr}.sidebar-exp{position:static}}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">EXP <span>/ Phase d'entraînement — Vue Scientifique</span></span>
+  <div class="topbar-info">
+    <span class="badge active" id="badge-part">—</span>
+    <span class="badge" style="background:#f59e0b;color:#fff;">🏋 ENTRAÎNEMENT</span>
+    <span class="badge" id="badge-prog">1/3</span>
+  </div>
+</div>
+
+<div class="container-wide" style="padding-top:12px;">
+
+  <div id="vue-intro" class="card" style="max-width:580px;margin:32px auto;">
+    <div class="section-label">Phase d'entraînement</div>
+    <div class="card-title">Avant l'expérience principale</div>
+    <p style="font-size:14px;line-height:1.6;margin-bottom:16px;">3 tâches simples vont être présentées au participant. Ces données ne sont <strong>pas enregistrées</strong>. Elles servent uniquement à vérifier que le participant a bien compris le protocole.</p>
+    <div class="alert alert-warning" style="margin-bottom:16px;">
+      <strong>Ce que voit le participant :</strong> l'interface complète sur son écran.<br>
+      <strong>Ce que vous voyez :</strong> l'énoncé et les contrôles — pas l'interface — pour ne pas influencer le participant.
+    </div>
+    <div class="alert alert-info" id="intro-seq">—</div>
+    <button class="btn btn-primary btn-lg btn-full" onclick="demarrer()">Commencer l'entraînement →</button>
+  </div>
+
+  <div id="vue-entrainement" class="hidden">
+    <div class="exp-layout">
+
+      <div class="sidebar-exp">
+
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div style="margin-bottom:8px;"><span class="training-badge">ENTRAÎNEMENT</span></div>
+          <div style="font-size:13px;font-weight:700;" id="entr-nom">—</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;" id="entr-prog">Tâche 1/3</div>
+          <div style="display:flex;gap:4px;margin-top:10px;" id="entr-dots"></div>
+        </div>
+
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div class="section-label" style="margin-bottom:6px;">Chronomètre (indicatif)</div>
+          <div class="chrono-display" id="chrono-display">00:00.00</div>
+          <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+            <button class="btn btn-sm" style="background:#f59e0b;color:#fff;" id="btn-start" onclick="Chrono.start();document.getElementById('btn-start').disabled=true;document.getElementById('btn-stop').disabled=false;">▶ Start</button>
+            <button class="btn btn-secondary btn-sm" id="btn-stop" disabled onclick="Chrono.stop();document.getElementById('btn-start').disabled=false;document.getElementById('btn-stop').disabled=true;">⏹ Stop</button>
+            <button class="btn btn-secondary btn-sm" onclick="Chrono.reset();document.getElementById('btn-start').disabled=false;document.getElementById('btn-stop').disabled=true;">↺</button>
+          </div>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:6px;text-align:center;">Non enregistré</p>
+        </div>
+
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div class="section-label" style="margin-bottom:6px;">Énoncé (lu à voix haute)</div>
+          <div style="background:var(--warning-light);border:1.5px solid #fcd34d;border-radius:var(--radius-sm);padding:12px;font-size:13px;line-height:1.6;" id="entr-enonce">—</div>
+          <div style="font-size:12px;background:var(--surface2);border-radius:4px;padding:8px;font-family:var(--mono);margin-top:10px;" id="entr-reponse">—</div>
+        </div>
+
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div class="section-label" style="margin-bottom:8px;">Résultat (non enregistré)</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-success" style="flex:1;" onclick="validerEntr(true)">✓ Compris</button>
+            <button class="btn btn-danger" style="flex:1;" onclick="validerEntr(false)">✗ Refaire</button>
+          </div>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">Appuyez sur "Refaire" si le participant n'a pas compris. Les données ne sont jamais enregistrées.</p>
+        </div>
+
+      </div>
+
+      <!-- CÔTÉ SCIENTIFIQUE : aperçu, pas l'iframe -->
+      <div>
+        <div class="interface-frame-wrap">
+          <div class="interface-frame-bar">
+            <div class="frame-dot red"></div><div class="frame-dot yellow"></div><div class="frame-dot green"></div>
+            <div class="frame-url">Interface d'entraînement — Interface senior-friendly (C)</div>
+          </div>
+          <div class="iface-preview" style="height:calc(100vh - 180px);min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+            <div class="iface-name">🖥 Interface affichée sur l'écran du participant</div>
+            <p>L'interface est visible sur la <strong>vue participant</strong> (second écran).</p>
+            <p class="iface-note">Cette vue ne montre pas l'interface pour éviter que l'expérimentateur influence le participant.<br>
+            Les clics et interactions du participant se passent sur son écran.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="vue-fin-entr" class="hidden" style="max-width:580px;margin:32px auto;">
+    <div class="card">
+      <div class="section-label">Entraînement terminé</div>
+      <div class="card-title">✓ Le participant a compris le protocole</div>
+      <p style="font-size:14px;line-height:1.6;margin-bottom:20px;">L'expérience principale peut maintenant commencer. L'interface va changer et toutes les données seront enregistrées.</p>
+      <div class="alert alert-info">L'interface sur l'écran du participant va être mise à jour au lancement.</div>
+      <button class="btn btn-primary btn-lg btn-full" style="margin-top:12px;" onclick="window.location.href='experience.html'">
+        Lancer l'expérience principale →
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script src="scripts/main.js"></script>
+<script>
+  Data.load();
+  Canal.init(State.participant.code);
+  let entrIdx = 0;
+
+  document.getElementById('badge-part').textContent = State.participant.code || '—';
+  if (State.participant.code) document.getElementById('badge-part').classList.add('active');
+
+  const ORDRE_LABELS = { G1:'A→B→C', G2:'B→C→A', G3:'C→A→B' };
+  document.getElementById('intro-seq').innerHTML =
+    `<strong>Participant :</strong> ${State.participant.code} &nbsp;|&nbsp; <strong>Type :</strong> ${State.participant.typeGroupe} &nbsp;|&nbsp; <strong>Groupe :</strong> ${State.participant.groupe} &nbsp;|&nbsp; <strong>Ordre :</strong> ${ORDRE_LABELS[State.participant.groupe]||'?'}`;
+
+  function demarrer() {
+    Utils.hide('vue-intro');
+    Utils.show('vue-entrainement');
+    chargerEntr(0);
+    // Signaler à la vue participant : afficher l'interface d'entraînement
+    Canal.envoyer({ type: 'entrainement_debut', url: '../interface3/index.html', tache: 'Tâche d\'entraînement 1/3' });
+  }
+
+  function chargerEntr(idx) {
+    entrIdx = idx;
+    const t = TACHES_ENTRAINEMENT[idx];
+    document.getElementById('badge-prog').textContent = `${idx+1}/3`;
+    document.getElementById('entr-nom').textContent = t.label;
+    document.getElementById('entr-prog').textContent = `Tâche d'entraînement ${idx+1} / 3`;
+    document.getElementById('entr-enonce').textContent = t.enonce;
+    document.getElementById('entr-reponse').textContent = '✓ ' + t.reponse;
+
+    document.getElementById('entr-dots').innerHTML = TACHES_ENTRAINEMENT.map((_,i) => {
+      const cls = i<idx?'step-dot done':i===idx?'step-dot current':'step-dot';
+      return `<span class="${cls}" style="display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;${i===idx?'background:#f59e0b':''}"></span>`;
+    }).join('');
+
+    Chrono.reset();
+    document.getElementById('btn-start').disabled = false;
+    document.getElementById('btn-stop').disabled = true;
+
+    // Vue participant : mettre à jour l'énoncé dans la barre du bas
+    Canal.envoyer({ type: 'enonce', enonce: t.enonce, tache: `Entraînement ${idx+1}/3 — ${t.label}` });
+  }
+
+  function validerEntr(ok) {
+    if (State.chrono.running) Chrono.stop();
+    if (!ok) {
+      // Refaire la même tâche
+      Chrono.reset();
+      document.getElementById('btn-start').disabled = false;
+      document.getElementById('btn-stop').disabled = true;
+      return;
+    }
+    const next = entrIdx + 1;
+    if (next >= TACHES_ENTRAINEMENT.length) {
+      Utils.hide('vue-entrainement');
+      Utils.show('vue-fin-entr');
+      Canal.envoyer({ type: 'fin_entrainement' });
+    } else {
+      chargerEntr(next);
+      Canal.envoyer({ type: 'enonce', enonce: TACHES_ENTRAINEMENT[next].enonce, tache: `Entraînement ${next+1}/3 — ${TACHES_ENTRAINEMENT[next].label}` });
+    }
+  }
+</script>
+</body>
+</html>

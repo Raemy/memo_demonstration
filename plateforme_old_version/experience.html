@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expérience — Plateforme v4</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    .exp-layout{display:grid;grid-template-columns:290px 1fr;gap:12px;align-items:start}
+    .sidebar-exp{position:sticky;top:52px;display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 70px);overflow-y:auto}
+    iframe.iface{width:100%;height:calc(100vh - 120px);min-height:700px;border:none;display:block}
+    .chrono-display{font-family:var(--mono);font-size:34px;font-weight:500;color:var(--text);text-align:center;padding:10px;background:var(--surface2);border-radius:var(--radius);border:2px solid var(--border);letter-spacing:.05em;transition:color .3s,border-color .3s}
+    .chrono-display.running{color:var(--accent);border-color:var(--accent)}
+    .chrono-display.stopped{color:var(--success);border-color:var(--success)}
+    .oral-note{background:var(--warning-light);border:1px solid #fcd34d;border-radius:6px;padding:8px 10px;font-size:12px;color:#92400e;margin-top:6px}
+    .q-waiting{padding:20px;background:var(--accent-light);border:1.5px solid #bfdbfe;border-radius:var(--radius);text-align:center;font-size:14px;color:#1e40af}
+    @media(max-width:900px){.exp-layout{grid-template-columns:1fr}.sidebar-exp{position:static;max-height:none}iframe.iface{height:500px;min-height:500px}}
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <span class="topbar-brand">EXP <span>/ Vue Scientifique</span></span>
+  <div class="topbar-info">
+    <span class="badge active" id="badge-part">—</span>
+    <span class="badge" id="badge-iface">—</span>
+    <span class="badge" id="badge-tache">—</span>
+  </div>
+</div>
+
+<div class="container-wide" style="padding-top:12px;">
+
+  <!-- EXPÉRIENCE -->
+  <div id="vue-experience">
+    <div class="exp-layout">
+
+      <div class="sidebar-exp">
+
+        <!-- Info tâche -->
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;" id="iface-badge">—</span>
+            <span style="font-size:11px;color:var(--text-muted);" id="tache-prog">0/6</span>
+          </div>
+          <div style="font-size:13px;font-weight:700;" id="tache-nom">—</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;" id="tache-type">—</div>
+          <div style="display:flex;gap:3px;margin-top:10px;flex-wrap:wrap;" id="step-dots"></div>
+        </div>
+
+        <!-- Chrono -->
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div class="section-label" style="margin-bottom:6px;">Chronomètre (h:mm:ss.cs)</div>
+          <div class="chrono-display" id="chrono-display">00:00.00</div>
+          <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary btn-sm" id="btn-start" onclick="dChrono()">▶ Start</button>
+            <button class="btn btn-secondary btn-sm" id="btn-stop" disabled onclick="sChrono()">⏹ Stop</button>
+            <button class="btn btn-secondary btn-sm" onclick="rChrono()">↺ Reset</button>
+          </div>
+        </div>
+
+        <!-- Clics (reçus depuis vue participant) -->
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div class="section-label" style="margin-bottom:6px;">Clics (vue participant)</div>
+          <div class="click-counter">
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);">Clics participant</div>
+              <div class="click-count-num" id="click-count">0</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <button class="btn btn-secondary btn-sm" onclick="resetClicsParticipant()">Reset</button>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Les clics sont comptés automatiquement depuis l'interface affichée sur l'écran du participant.</div>
+        </div>
+
+        <!-- Énoncé -->
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div class="section-label" style="margin-bottom:6px;">Énoncé (lu à voix haute)</div>
+          <div style="background:var(--warning-light);border:1.5px solid #fcd34d;border-radius:var(--radius-sm);padding:12px;font-size:13px;line-height:1.6;" id="task-enonce">—</div>
+          <div id="oral-wrap"></div>
+          <div id="reponse-wrap" class="hidden" style="font-size:12px;background:var(--surface2);border-radius:4px;padding:8px;font-family:var(--mono);margin-top:8px;"></div>
+        </div>
+
+        <!-- Validation -->
+        <div class="card" style="padding:14px;margin-bottom:0;">
+          <div class="section-label" style="margin-bottom:8px;">Validation</div>
+          <div id="validation-normale">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <button class="btn btn-success" style="flex:1;font-size:15px;padding:12px;" onclick="validerTache(true)">✓ Réussie</button>
+              <button class="btn btn-danger" style="flex:1;font-size:15px;padding:12px;" onclick="validerTache(false)">✗ Échouée</button>
+            </div>
+            <div class="form-group" style="margin-top:10px;margin-bottom:0;">
+              <label style="font-size:11px;">Note (optionnel)</label>
+              <textarea id="note-exp" rows="2" style="font-size:12px;" placeholder="Observations…"></textarea>
+            </div>
+          </div>
+          <div id="validation-attente" class="hidden">
+            <div class="q-waiting">
+              📋 <strong>En attente du participant</strong><br>
+              <span style="font-size:12px;margin-top:4px;display:block;">Le participant remplit les questionnaires sur son écran.<br>Cette vue se mettra à jour automatiquement.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- IFRAME (miroir de la vue participant — lecture seule) -->
+      <div>
+        <div class="interface-frame-wrap">
+          <div class="interface-frame-bar">
+            <div class="frame-dot red"></div><div class="frame-dot yellow"></div><div class="frame-dot green"></div>
+            <div class="frame-url" id="frame-url">—</div>
+            <span style="font-size:10px;color:#6b7280;margin-left:auto;">(miroir — les clics sont comptés sur l'écran du participant)</span>
+          </div>
+          <iframe class="iface" id="interface-iframe" src="about:blank" title="Aperçu interface"></iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FIN -->
+  <div id="vue-fin" class="hidden" style="max-width:600px;margin:40px auto;">
+    <div class="card">
+      <div class="section-label">Expérience terminée</div>
+      <div class="card-title">✓ Toutes les tâches réalisées</div>
+      <div class="card-subtitle" id="fin-recap"></div>
+      <div class="grid2" style="margin:16px 0;">
+        <div class="stat-card"><div class="stat-val" id="fin-total">—</div><div class="stat-label">Tâches</div></div>
+        <div class="stat-card"><div class="stat-val" id="fin-ok">—</div><div class="stat-label">Réussies</div></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="Data.exportTaches()">⬇ Export tâches CSV</button>
+        <button class="btn btn-primary" onclick="Data.exportQuestionnaires()">⬇ Export questionnaires CSV</button>
+        <button class="btn btn-secondary" onclick="window.location.href='index.html'">Nouveau participant</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="scripts/main.js"></script>
+<script>
+  Data.load();
+  Canal.init(State.participant.code);
+
+  const code = State.participant.code;
+  document.getElementById('badge-part').textContent = code || '—';
+  if (code) document.getElementById('badge-part').classList.add('active');
+
+  // Reconstruire séquence si besoin
+  if (!State.sequence || !State.sequence.length) {
+    const built = buildSequence(code);
+    State.sequence = built.sequence;
+    State.plan = built.plan;
+    State.participant.groupe = built.groupe;
+  }
+  const SEQ = State.sequence;
+
+  // ── Réception clics depuis vue participant ──
+  Canal.ecouter(msg => {
+    if (msg.type === 'clic_count') {
+      Clics.setCount(msg.count);
+    }
+    if (msg.type === 'questionnaires_finis') {
+      // Le participant a fini les questionnaires → passer à la tâche suivante
+      Data.load(); // recharger les questionnaires sauvegardés par la vue participant
+      const nextIdx = State.tacheIdx + 1;
+      if (nextIdx >= SEQ.length) terminer();
+      else chargerTache(nextIdx);
+    }
+  });
+
+  function resetClicsParticipant() {
+    Clics.setCount(0);
+    Canal.envoyer({ type: 'reset_clics' });
+  }
+
+  function chargerTache(idx) {
+    State.tacheIdx = idx;
+    Data.save();
+    if (idx >= SEQ.length) { terminer(); return; }
+
+    const t = SEQ[idx];
+    const iface = t.ifaceObj;
+
+    document.getElementById('badge-iface').textContent = iface.label;
+    document.getElementById('badge-tache').textContent = `Tâche ${idx+1}/${SEQ.length}`;
+
+    const b = document.getElementById('iface-badge');
+    b.textContent = iface.shortLabel; b.style.background = iface.couleur;
+    document.getElementById('tache-prog').textContent = `${idx+1} / ${SEQ.length}`;
+    document.getElementById('tache-nom').textContent = t.label;
+    document.getElementById('tache-type').textContent = t.type === 'simple' ? '⬡ Simple' : '⬢ Complexe';
+    document.getElementById('task-enonce').textContent = t.enonce;
+
+    const oralWrap = document.getElementById('oral-wrap');
+    const repWrap  = document.getElementById('reponse-wrap');
+    if (t.validation === 'oral') {
+      oralWrap.innerHTML = '<div class="oral-note">🎤 <strong>Validation orale</strong> — Écoutez la réponse du participant.</div>';
+      repWrap.classList.add('hidden');
+    } else {
+      oralWrap.innerHTML = '';
+      repWrap.classList.remove('hidden');
+      repWrap.textContent = '✓ ' + t.reponse;
+    }
+
+    // Step dots
+    document.getElementById('step-dots').innerHTML = SEQ.map((st,i) => {
+      const cls = i<idx?'step-dot done':i===idx?'step-dot current':'step-dot';
+      return `<span class="${cls}" style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;${i===idx?'background:'+st.ifaceObj.couleur:''}"></span>`;
+    }).join('');
+
+    // iframe (miroir)
+    document.getElementById('frame-url').textContent = iface.url;
+    document.getElementById('interface-iframe').src = iface.url;
+
+    // Reset
+    Chrono.reset(); Clics.reset();
+    document.getElementById('note-exp').value = '';
+    document.getElementById('btn-start').disabled = false;
+    document.getElementById('btn-stop').disabled = true;
+    Utils.show('validation-normale');
+    Utils.hide('validation-attente');
+
+    // Envoyer à la vue participant
+    Canal.envoyer({ type: 'interface', url: iface.url, label: iface.label, tache: `${idx+1}/6 — ${t.label}` });
+  }
+
+  function dChrono() { Chrono.start(); document.getElementById('btn-start').disabled=true; document.getElementById('btn-stop').disabled=false; }
+  function sChrono() { Chrono.stop(); document.getElementById('btn-start').disabled=false; document.getElementById('btn-stop').disabled=true; }
+  function rChrono() { Chrono.reset(); document.getElementById('btn-start').disabled=false; document.getElementById('btn-stop').disabled=true; }
+
+  function validerTache(reussite) {
+    if (State.chrono.running) Chrono.stop();
+
+    const t = SEQ[State.tacheIdx];
+    const tempsDecompose = Chrono.getDecompose();
+    const clics = State.clics.count;
+
+    Data.enregistrerTache({ tache:t, tempsDecompose, clics, reussite, note: document.getElementById('note-exp').value.trim() });
+
+    const nextIdx = State.tacheIdx + 1;
+    const finInterface = (State.tacheIdx % 2 === 1); // après la tâche complexe = fin d'interface
+    const ifaceTerminee = SEQ[State.tacheIdx].ifaceObj;
+
+    if (finInterface && State.participant.questionnaireMode === 'numerique') {
+      // Afficher attente côté scientifique
+      Utils.hide('validation-normale');
+      Utils.show('validation-attente');
+      // Envoyer signal à la vue participant pour qu'elle affiche les questionnaires
+      Canal.envoyer({ type: 'questionnaire_interface', ifaceId: ifaceTerminee.id });
+      // La suite se déclenchera quand la vue participant enverra 'questionnaires_finis'
+    } else {
+      if (nextIdx >= SEQ.length) terminer();
+      else chargerTache(nextIdx);
+    }
+  }
+
+  function terminer() {
+    Utils.hide('vue-experience');
+    Utils.show('vue-fin');
+    const ok = State.donnees.filter(d=>d.reussite===1).length;
+    document.getElementById('fin-total').textContent = State.donnees.length;
+    document.getElementById('fin-ok').textContent = ok;
+    document.getElementById('fin-recap').textContent = `${code} — ${State.participant.typeGroupe} ${State.participant.groupe} — ${DateFR.dateCourte()}`;
+    Canal.envoyer({ type: 'fin' });
+  }
+
+  // Init
+  chargerTache(State.tacheIdx || 0);
+</script>
+</body>
+</html>

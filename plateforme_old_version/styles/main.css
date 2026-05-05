@@ -84,9 +84,9 @@ html, body {
 }
 
 .container-wide {
-  max-width: 100%; /* 🔥 plein écran */
-  margin: 0;
-  padding: 12px 16px; /* optionnel, plus compact */
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 20px;
 }
 
 /* ===== CARDS ===== */

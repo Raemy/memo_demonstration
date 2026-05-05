@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plateforme Expérimentale v5</title>
+  <title>Plateforme Expérimentale v3</title>
   <link rel="stylesheet" href="styles/main.css">
   <style>
     .hero{background:var(--text);padding:32px 0 24px;text-align:center;color:#fff}
@@ -20,18 +20,14 @@
     .groupe-info .g-ordre{font-family:var(--mono);font-size:12px;color:var(--accent)}
     .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center}
     .modal-box{background:#fff;border-radius:12px;padding:28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.2)}
-    .section-demog{border-top:1px solid var(--border);padding-top:14px;margin-top:14px;}
-    .section-demog-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:10px;}
-    .row3{display:flex;gap:12px;flex-wrap:wrap;}
-    .row3 .form-group{flex:1;min-width:130px;}
   </style>
 </head>
 <body>
 
 <div class="topbar">
-  <span class="topbar-brand">EXP <span>/ Plateforme v5</span></span>
+  <span class="topbar-brand">EXP <span>/ Plateforme v3</span></span>
   <div class="topbar-info">
-    <span class="badge">v5.0</span>
+    <span class="badge">v3.0</span>
     <span class="badge" id="badge-nb">0 participant(s)</span>
   </div>
 </div>
@@ -39,7 +35,7 @@
 <div class="hero">
   <div class="mono-tag">MÉMOIRE ERGONOMIE COGNITIVE</div>
   <h1>Plateforme Expérimentale</h1>
-  <p>Protocole mono-poste · 1 ordinateur · Expérimentateur + Participant</p>
+  <p>Carré latin intégré — NASA-TLX + F-SUS — Export Jamovi</p>
 </div>
 
 <div class="container">
@@ -50,7 +46,6 @@
     <div class="card-title">Nouveau participant</div>
     <div class="card-subtitle">Le groupe Latin (G1/G2/G3) et l'ordre des interfaces sont déterminés automatiquement depuis le code participant.</div>
 
-    <!-- Identifiant + type + genre -->
     <div style="display:flex;gap:16px;flex-wrap:wrap;">
       <div class="form-group" style="flex:1;min-width:160px;">
         <label for="input-code">Code participant * <span style="font-size:11px;color:var(--text-muted);">(ex: AG1, JE4…)</span></label>
@@ -59,29 +54,19 @@
       <div class="form-group" style="flex:1;min-width:160px;">
         <label for="sel-type">Type de participant *</label>
         <select id="sel-type" onchange="previewGroupe(document.getElementById('input-code').value)">
-          <option value="">- Sélectionner -</option>
+          <option value="">— Sélectionner —</option>
           <option value="AG">Âgé (AG)</option>
           <option value="JE">Jeune (JE)</option>
-        </select>
-      </div>
-      <div class="form-group" style="flex:1;min-width:160px;">
-        <label for="sel-genre">Genre *</label>
-        <select id="sel-genre">
-          <option value="">- Sélectionner -</option>
-          <option value="F">Femme</option>
-          <option value="H">Homme</option>
-          <option value="A">Autre / Non précisé</option>
         </select>
       </div>
     </div>
 
     <!-- Prévisualisation groupe -->
     <div class="groupe-info" id="groupe-info">
-      <div class="g-label" id="gi-label">-</div>
-      <div class="g-ordre" id="gi-ordre">-</div>
+      <div class="g-label" id="gi-label">—</div>
+      <div class="g-ordre" id="gi-ordre">—</div>
     </div>
 
-    <!-- Mode questionnaires -->
     <div class="form-group" style="margin-top:14px;">
       <label>Modalité des questionnaires *</label>
       <div class="radio-group">
@@ -96,10 +81,24 @@
       </div>
     </div>
 
-    <div id="alert-form"    class="alert alert-warning hidden">Veuillez remplir tous les champs obligatoires.</div>
+    <div id="alert-form" class="alert alert-warning hidden">Veuillez remplir tous les champs obligatoires.</div>
     <div id="alert-doublon" class="alert alert-warning hidden">⚠ Ce code a déjà des données. Les nouvelles mesures s'ajouteront.</div>
 
-    <button class="btn btn-primary btn-lg" style="margin-top:8px;" onclick="demarrer()">Commencer →</button>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+      <button class="btn btn-primary btn-lg" onclick="demarrer()">Commencer →</button>
+      <button class="btn btn-secondary" onclick="ouvrirVueParticipant()">🖥 Ouvrir vue Participant</button>
+    </div>
+    <!-- Lien à copier pour le second appareil -->
+    <div id="lien-participant" style="display:none; margin-top:12px; padding:12px 14px; background:var(--accent-light); border:1.5px solid #bfdbfe; border-radius:var(--radius-sm);">
+      <div style="font-size:12px; font-weight:600; color:#1e40af; margin-bottom:6px;">🔗 Lien à ouvrir sur le second appareil (tablette / ordi du participant) :</div>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <code id="lien-participant-url" style="font-size:12px; background:#fff; border:1px solid #bfdbfe; border-radius:4px; padding:6px 10px; flex:1; word-break:break-all; color:#1e40af;"></code>
+        <button class="btn btn-sm btn-primary" onclick="copierLien()">📋 Copier</button>
+      </div>
+      <div style="font-size:11px; color:#3b82f6; margin-top:6px;">Ce lien est lié au code participant. Ouvrez-le sur la tablette du participant.</div>
+    </div>
+    <div style="display:none"><!-- spacer --></div
+    </div>
   </div>
 
   <!-- PARTICIPANTS -->
@@ -108,7 +107,7 @@
     <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
       <div>
         <div class="card-title" style="font-size:15px;">Participants enregistrés</div>
-        <div style="font-size:13px;color:var(--text-muted);" id="lbl-count">-</div>
+        <div style="font-size:13px;color:var(--text-muted);" id="lbl-count">—</div>
       </div>
     </div>
 
@@ -140,7 +139,7 @@
 <div class="modal-bg" id="modal" onclick="if(event.target===this)this.style.display='none'">
   <div class="modal-box">
     <h3 style="font-size:16px;margin-bottom:8px;">Confirmer</h3>
-    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;" id="modal-txt">-</p>
+    <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;" id="modal-txt">—</p>
     <div style="display:flex;gap:10px;">
       <button class="btn btn-danger" id="modal-ok">Confirmer</button>
       <button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Annuler</button>
@@ -163,7 +162,7 @@
     const gi = document.getElementById('groupe-info');
     if (!code || code.length < 2) { gi.style.display='none'; return; }
     const g = getGroupeFromCode(code);
-    document.getElementById('gi-label').textContent = `Groupe ${g} - Carré latin`;
+    document.getElementById('gi-label').textContent = `Groupe ${g} — Carré latin`;
     document.getElementById('gi-ordre').textContent = ORDRE_LABELS[g];
     gi.style.display = 'block';
   }
@@ -174,35 +173,26 @@
   }
 
   function demarrer() {
-    const code  = document.getElementById('input-code').value.trim().toUpperCase();
-    const type  = document.getElementById('sel-type').value;
-    const genre = document.getElementById('sel-genre').value;
-
-    if (!code || !type || !genre || !selMode_) {
-      Utils.show('alert-form'); return;
-    }
+    const code = document.getElementById('input-code').value.trim().toUpperCase();
+    const type = document.getElementById('sel-type').value;
+    if (!code || !type || !selMode_) { Utils.show('alert-form'); return; }
     Utils.hide('alert-form');
     Data.load();
     if (State.donnees.some(d => d.code_participant === code)) Utils.show('alert-doublon');
     else Utils.hide('alert-doublon');
 
     const { groupe, plan, sequence } = buildSequence(code);
-    State.participant = { code, groupe, typeGroupe: type, questionnaireMode: selMode_, genre,
-                          age:'', niveauEtudes:'', aisanceNumerique:'' };
+    State.participant = { code, groupe, typeGroupe: type, questionnaireMode: selMode_ };
     State.sequence = sequence;
     State.plan = plan;
     State.tacheIdx = 0;
-    Data.resetAllQuestionnaires();
+    Data.resetQuestionnaires();  // ← reset systématique des questionnaires pour nouveau participant
     Data.save();
 
-    if (selMode_ === 'numerique') {
-      window.location.href = 'questionnaire-pre.html';
-    } else {
-      window.location.href = 'entrainement.html';
-    }
+    window.location.href = selMode_ === 'numerique' ? 'questionnaire-pre.html' : 'entrainement.html'; Data.resetSession();;
   }
 
-  // ── Liste participants ──
+  // ── Rafraîchir liste ──
   function rafraichir() {
     Data.load();
     const codes = Data.allCodes();
@@ -213,18 +203,18 @@
     if (!codes.length) { liste.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">Aucun participant.</p>'; afficherPreview(); return; }
 
     liste.innerHTML = codes.map(code => {
-      const ms  = State.donnees.filter(d => d.code_participant === code);
-      const gp  = ms[0]?.groupe_participant || '?';
-      const gl  = ms[0]?.groupe_latin || '?';
-      const dt  = ms[0]?.date || '?';
-      const ok  = ms.filter(d => d.reussite === 1).length;
+      const ms = State.donnees.filter(d => d.code_participant === code);
+      const gp = ms[0]?.groupe_participant || '?';
+      const gl = ms[0]?.groupe_latin || '?';
+      const dt = ms[0]?.date || '?';
+      const ok = ms.filter(d => d.reussite === 1).length;
       return `<div class="p-row">
         <input type="checkbox" id="cb-${code}" style="accent-color:var(--danger);" onchange="toggleSel('${code}',this.checked)">
         <span class="p-code">${code}</span>
         <span class="p-groupe">${gp} · ${gl}</span>
         <span style="color:var(--text-muted);font-size:12px;flex:1;">${dt}</span>
         <span class="p-badge">${ms.length} tâches · ${ok} ✓</span>
-        <button class="btn btn-sm btn-secondary" onclick="Data.exportTaches(['${code}'])">⬇</button>
+        <button class="btn btn-sm btn-secondary" title="Exporter" onclick="Data.exportTaches(['${code}'])">⬇</button>
         <button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);border:1px solid #fecaca;" onclick="demanderSupp('${code}')">🗑</button>
       </div>`;
     }).join('');
@@ -234,9 +224,9 @@
   function afficherPreview() {
     const el = document.getElementById('preview');
     if (!State.donnees.length) { el.innerHTML='<p style="font-size:13px;color:var(--text-muted);">Aucune donnée.</p>'; return; }
-    const hdrs = ['code_participant','date','groupe_participant','groupe_latin','age','genre','interface_id','tache_id','type_tache','temps_secondes','nombre_clics','reussite'];
+    const hdrs = ['code_participant','date','groupe_participant','groupe_latin','interface_id','tache_id','type_tache','temps_secondes','nombre_clics','reussite'];
     el.innerHTML = `<table class="data-table"><thead><tr>${hdrs.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>
-      ${State.donnees.slice(-8).map(r=>`<tr>${hdrs.map(h=>`<td>${r[h]??'-'}</td>`).join('')}</tr>`).join('')}
+      ${State.donnees.slice(-8).map(r=>`<tr>${hdrs.map(h=>`<td>${r[h]??'—'}</td>`).join('')}</tr>`).join('')}
     </tbody></table>${State.donnees.length>8?`<p style="font-size:11px;color:var(--text-muted);margin-top:4px;">…${State.donnees.length-8} de plus</p>`:''}`;
   }
 
@@ -263,7 +253,44 @@
     document.getElementById('modal').style.display = 'flex';
   }
 
-  Data.load(); rafraichir();
+  // ── Vue participant avec code dans l'URL ──
+  function ouvrirVueParticipant() {
+    const code = document.getElementById('input-code').value.trim().toUpperCase() || State.participant.code;
+    if (!code) { alert('Saisissez d\'abord un code participant.'); return; }
+    const url = window.location.origin + window.location.pathname.replace('index.html','') + 'vue-participant.html?code=' + encodeURIComponent(code);
+    // Afficher le lien à copier
+    document.getElementById('lien-participant').style.display = 'block';
+    document.getElementById('lien-participant-url').textContent = url;
+    // Ouvrir dans une nouvelle fenêtre (même appareil)
+    window.open(url, 'vue_participant', 'width=1280,height=800');
+  }
+
+  function copierLien() {
+    const url = document.getElementById('lien-participant-url').textContent;
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = event.target;
+      btn.textContent = '✓ Copié !';
+      setTimeout(() => btn.textContent = '📋 Copier', 2000);
+    }).catch(() => {
+      // Fallback sélection manuelle
+      const el = document.getElementById('lien-participant-url');
+      const range = document.createRange();
+      range.selectNode(el);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+    });
+  }
+
+  // Afficher le lien si un code participant est déjà chargé
+  function afficherLienSiCode() {
+    const code = State.participant.code;
+    if (!code) return;
+    const url = window.location.origin + window.location.pathname.replace('index.html','') + 'vue-participant.html?code=' + encodeURIComponent(code);
+    document.getElementById('lien-participant').style.display = 'block';
+    document.getElementById('lien-participant-url').textContent = url;
+  }
+
+  Data.load(); rafraichir(); afficherLienSiCode();
 </script>
 </body>
 </html>

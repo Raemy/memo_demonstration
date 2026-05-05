@@ -88,7 +88,7 @@
 <div class="vp-top">
   <div class="vp-top-l">Vue <span>Participant</span></div>
   <div class="vp-badges">
-    <span class="vp-badge" id="vp-code">-</span>
+    <span class="vp-badge" id="vp-code">—</span>
     <span class="vp-badge" id="vp-phase">En attente</span>
     <span class="vp-badge live hidden" id="vp-live">● EN DIRECT</span>
   </div>
@@ -114,7 +114,7 @@
     <div class="q-container">
       <div class="q-header">
         <h1 id="q-titre">Questionnaire</h1>
-        <p id="q-sous">-</p>
+        <p id="q-sous">—</p>
         <div class="q-step-dots" id="q-dots"></div>
       </div>
       <div id="q-body"></div>
@@ -124,7 +124,7 @@
 </div>
 
 <div class="vp-bottom">
-  <span class="vp-task-label" id="vp-task">-</span>
+  <span class="vp-task-label" id="vp-task">—</span>
   <div class="vp-clics">
     <span style="font-size:11px;">Clics :</span>
     <span class="vp-clic-count" id="vp-clic-num">0</span>
@@ -179,8 +179,8 @@
     const wrap = document.getElementById('vp-iframe-wrap');
     wrap.style.display = 'flex';
     document.getElementById('vp-live').classList.remove('hidden');
-    document.getElementById('vp-phase').textContent = label || '-';
-    document.getElementById('vp-task').textContent = tache || '-';
+    document.getElementById('vp-phase').textContent = label || '—';
+    document.getElementById('vp-task').textContent = tache || '—';
     const iframe = document.getElementById('vp-iframe');
     if (iframe.src !== url) { iframe.src = url; setTimeout(attachClicsIframe, 1000); }
     else attachClicsIframe();
@@ -199,7 +199,7 @@
     document.getElementById('vp-questionnaire').style.display = 'block';
     document.getElementById('vp-phase').textContent = 'Questionnaire';
     document.getElementById('vp-live').classList.add('hidden');
-    document.getElementById('vp-task').textContent = `Questionnaire - ${INTERFACES[ifaceId]?.label || ifaceId}`;
+    document.getElementById('vp-task').textContent = `Questionnaire — ${INTERFACES[ifaceId]?.label || ifaceId}`;
 
     afficherEtape(1);
   }
@@ -243,9 +243,9 @@
       `<div class="sus-item">
         <div class="sus-question">Dans l'ensemble, je qualifierais la convivialité de <strong>${iface.label||''}</strong> de…</div>
         <select class="sus-global" id="sus-global-vp">
-          <option value="">- Sélectionner -</option>
+          <option value="">— Sélectionner —</option>
           ${[['1','La pire qu\'on puisse imaginer'],['2','Mauvaise'],['3','Acceptable'],['4','Bonne'],['5','Excellente'],['6','La meilleure qu\'on puisse imaginer']]
-            .map(([v,l])=>`<option value="${v}" ${qAnswers.sus.global===v?'selected':''}>${v} - ${l}</option>`).join('')}
+            .map(([v,l])=>`<option value="${v}" ${qAnswers.sus.global===v?'selected':''}>${v} — ${l}</option>`).join('')}
         </select>
       </div>` +
       `<button class="q-btn-next" onclick="sauvegarderSUS()">Suivant →</button>`;
@@ -279,11 +279,11 @@
     const ts = qData.tSimple, tc = qData.tComplexe;
     let html = '';
     if (ts) {
-      html += `<div class="tache-sep">⬡ Tâche simple - ${ts.label}</div>` +
+      html += `<div class="tache-sep">⬡ Tâche simple — ${ts.label}</div>` +
         NASA_DIMENSIONS.map(dim => nasaCard(`nt_s_${dim.id}`, dim, qAnswers.nasaS[dim.id])).join('');
     }
     if (tc) {
-      html += `<div class="tache-sep" style="background:#fdf2f8;border-color:#f0abfc;color:#7e22ce;">⬢ Tâche complexe - ${tc.label}</div>` +
+      html += `<div class="tache-sep" style="background:#fdf2f8;border-color:#f0abfc;color:#7e22ce;">⬢ Tâche complexe — ${tc.label}</div>` +
         NASA_DIMENSIONS.map(dim => nasaCard(`nt_c_${dim.id}`, dim, qAnswers.nasaC[dim.id])).join('');
     }
     html += `<button class="q-btn-next" onclick="finaliserQuestionnaire()">✓ Valider et continuer →</button>
@@ -337,12 +337,35 @@
     afficherAttente('Questionnaire terminé…');
   }
 
+  // ── Récupérer le code depuis l'URL : vue-participant.html?code=JE01 ──
+  const urlParams = new URLSearchParams(window.location.search);
+  const codeFromUrl = urlParams.get('code');
+
+  if (codeFromUrl) {
+    document.getElementById('vp-code').textContent = codeFromUrl;
+    document.getElementById('vp-wait-info').textContent = `Participant : ${codeFromUrl} — En attente du démarrage…`;
+    Data.load();
+    if (!State.participant.code) State.participant.code = codeFromUrl;
+  } else {
+    Data.load();
+    const p = State.participant;
+    if (p.code) {
+      document.getElementById('vp-code').textContent = p.code;
+      document.getElementById('vp-wait-info').textContent = `Participant : ${p.code} · ${p.typeGroupe||''} ${p.groupe||''}`;
+    }
+  }
+
+  // ── Initialiser Firebase avec le code participant comme clé de session ──
+  Canal.init(codeFromUrl || State.participant.code || 'default').then(() => {
+    document.getElementById('conn-dot').classList.add('ok');
+    document.getElementById('conn-txt').textContent = 'Firebase connecté ✓';
+  });
+
   // ── Écouter le canal ──
-  Canal.init();
   Canal.ecouter(msg => {
     if (!msg || !msg.type) return;
     document.getElementById('conn-dot').classList.add('ok');
-    document.getElementById('conn-txt').textContent = 'Connecté';
+    document.getElementById('conn-txt').textContent = 'Firebase connecté ✓';
 
     if (msg.type === 'interface') {
       resetClics();
@@ -358,24 +381,18 @@
       phaseBadge.textContent = '🏋 ENTRAÎNEMENT'; phaseBadge.classList.remove('hidden');
       phaseBadge.style.background = '#f59e0b';
     } else if (msg.type === 'fin_entrainement') {
-      afficherAttente('Entraînement terminé - Expérience principale dans quelques instants…');
+      afficherAttente('Entraînement terminé — Expérience principale dans quelques instants…');
     } else if (msg.type === 'reset_clics') {
       resetClics();
     } else if (msg.type === 'fin') {
-      afficherAttente('Session terminée - Merci !');
+      afficherAttente('Session terminée — Merci !');
       document.getElementById('vp-wait-info').textContent = '';
       document.querySelector('.w-icon').textContent = '✅';
-      document.querySelector('#vp-waiting h2').textContent = 'Session terminée - Merci !';
+      document.querySelector('#vp-waiting h2').textContent = 'Session terminée — Merci !';
     }
   });
 
-  // Init depuis localStorage
-  Data.load();
-  const p = State.participant;
-  if (p.code) {
-    document.getElementById('vp-code').textContent = p.code;
-    document.getElementById('vp-wait-info').textContent = `Participant : ${p.code} · ${p.typeGroupe||''} ${p.groupe||''}`;
-  }
+  // (initialisation déplacée en haut du script)
 </script>
 </body>
 </html>

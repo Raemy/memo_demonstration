@@ -3,136 +3,223 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Expérience — Plateforme v4</title>
+  <title>Expérience - Plateforme v5</title>
   <link rel="stylesheet" href="styles/main.css">
   <style>
-    .exp-layout{display:grid;grid-template-columns:290px 1fr;gap:12px;align-items:start}
-    .sidebar-exp{position:sticky;top:52px;display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 70px);overflow-y:auto}
+    .exp-layout{display:grid;grid-template-columns:260px 1fr;gap:12px;align-items:start}
+    .sidebar-exp{position:sticky;top:52px;display:flex;flex-direction:column;gap:10px;
+      max-height:calc(100vh - 70px);overflow-y:auto}
     iframe.iface{width:100%;height:calc(100vh - 120px);min-height:700px;border:none;display:block}
-    .chrono-display{font-family:var(--mono);font-size:34px;font-weight:500;color:var(--text);text-align:center;padding:10px;background:var(--surface2);border-radius:var(--radius);border:2px solid var(--border);letter-spacing:.05em;transition:color .3s,border-color .3s}
+
+    /* Chrono */
+    .chrono-display{font-family:var(--mono);font-size:34px;font-weight:500;color:var(--text);text-align:center;
+      padding:10px;background:var(--surface2);border-radius:var(--radius);border:2px solid var(--border);
+      letter-spacing:.05em;transition:color .3s,border-color .3s}
     .chrono-display.running{color:var(--accent);border-color:var(--accent)}
     .chrono-display.stopped{color:var(--success);border-color:var(--success)}
-    .oral-note{background:var(--warning-light);border:1px solid #fcd34d;border-radius:6px;padding:8px 10px;font-size:12px;color:#92400e;margin-top:6px}
-    .q-waiting{padding:20px;background:var(--accent-light);border:1.5px solid #bfdbfe;border-radius:var(--radius);text-align:center;font-size:14px;color:#1e40af}
-    @media(max-width:900px){.exp-layout{grid-template-columns:1fr}.sidebar-exp{position:static;max-height:none}iframe.iface{height:500px;min-height:500px}}
+
+    /* Consigne toujours visible */
+    .consigne-box{background:var(--warning-light);border:2px solid #fcd34d;border-radius:var(--radius-sm);
+      padding:14px 16px;font-size:14px;line-height:1.65;font-weight:600;min-height:60px}
+
+    /* Flux par étape */
+    .etape-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+      text-transform:uppercase;letter-spacing:.04em;padding:4px 10px;border-radius:20px;margin-bottom:8px}
+    .etape-1{background:#dbeafe;color:#1e40af}  /* Lire */
+    .etape-2{background:#dcfce7;color:#14532d}  /* En cours */
+    .etape-3{background:#f3e8ff;color:#6b21a8}  /* Valider */
+
+    /* Bouton commencer central */
+    .btn-commencer{display:block;width:100%;padding:16px;font-size:16px;font-weight:700;
+      border-radius:var(--radius);background:var(--accent);color:#fff;border:none;cursor:pointer;
+      transition:background .2s;text-align:center}
+    .btn-commencer:hover{background:#1d4ed8}
+    .btn-commencer:disabled{background:#9ca3af;cursor:not-allowed}
+
+    /* État "en cours" (chrono actif) */
+    .etat-en-cours{display:none;padding:12px;background:#dcfce7;border:1px solid #86efac;
+      border-radius:var(--radius-sm);text-align:center;font-size:13px;font-weight:600;color:#14532d}
+    .etat-en-cours.visible{display:block}
+
+    /* Validation */
+    .btn-reussie{width:100%;padding:14px;font-size:15px;font-weight:700;border-radius:var(--radius);
+      background:var(--success);color:#fff;border:none;cursor:pointer;margin-bottom:8px;transition:opacity .2s}
+    .btn-reussie:hover{opacity:.9}
+    .btn-echouee{width:100%;padding:14px;font-size:15px;font-weight:700;border-radius:var(--radius);
+      background:var(--danger);color:#fff;border:none;cursor:pointer;transition:opacity .2s}
+    .btn-echouee:hover{opacity:.9}
+    .validation-zone{display:none}
+    .validation-zone.visible{display:block}
+
+    /* Oral note */
+    .oral-note{background:var(--warning-light);border:1px solid #fcd34d;border-radius:6px;
+      padding:8px 10px;font-size:12px;color:#92400e;margin-top:6px}
+
+    /* Questionnaire inline */
+    .q-inline-wrap{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);
+      padding:16px;max-height:calc(100vh - 200px);overflow-y:auto}
+    .q-scale-row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12px}
+    .q-scale-row label{flex:1;}
+    .q-scale-row input[type=range]{flex:2;}
+    .q-scale-row .val{font-family:var(--mono);font-size:12px;font-weight:600;min-width:24px;text-align:right}
+
+    @media(max-width:900px){
+      .exp-layout{grid-template-columns:1fr}
+      .sidebar-exp{position:static;max-height:none}
+      iframe.iface{height:450px;min-height:450px}
+    }
   </style>
 </head>
 <body>
 
 <div class="topbar">
-  <span class="topbar-brand">EXP <span>/ Vue Scientifique</span></span>
+  <span class="topbar-brand">EXP <span>/ Expérience principale</span></span>
   <div class="topbar-info">
-    <span class="badge active" id="badge-part">—</span>
-    <span class="badge" id="badge-iface">—</span>
-    <span class="badge" id="badge-tache">—</span>
+    <span class="badge active" id="badge-part">-</span>
+    <span class="badge" id="badge-iface">-</span>
+    <span class="badge" id="badge-tache">-</span>
   </div>
 </div>
 
 <div class="container-wide" style="padding-top:12px;">
 
-  <!-- EXPÉRIENCE -->
+  <!-- ═══════════════ EXPÉRIENCE ═══════════════ -->
   <div id="vue-experience">
     <div class="exp-layout">
 
+      <!-- ── Panneau gauche ── -->
       <div class="sidebar-exp">
 
-        <!-- Info tâche -->
+        <!-- Info tâche + dots -->
         <div class="card" style="padding:14px;margin-bottom:0;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;" id="iface-badge">—</span>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;color:#fff;" id="iface-badge">-</span>
             <span style="font-size:11px;color:var(--text-muted);" id="tache-prog">0/6</span>
           </div>
-          <div style="font-size:13px;font-weight:700;" id="tache-nom">—</div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;" id="tache-type">—</div>
+          <div style="font-size:14px;font-weight:700;" id="tache-nom">-</div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:2px;" id="tache-type">-</div>
           <div style="display:flex;gap:3px;margin-top:10px;flex-wrap:wrap;" id="step-dots"></div>
         </div>
 
-        <!-- Chrono -->
+        <!-- ══ ÉTAPE 1 : CONSIGNE (toujours visible) ══ -->
         <div class="card" style="padding:14px;margin-bottom:0;">
-          <div class="section-label" style="margin-bottom:6px;">Chronomètre (h:mm:ss.cs)</div>
-          <div class="chrono-display" id="chrono-display">00:00.00</div>
-          <div style="display:flex;gap:6px;justify-content:center;margin-top:10px;flex-wrap:wrap;">
-            <button class="btn btn-primary btn-sm" id="btn-start" onclick="dChrono()">▶ Start</button>
-            <button class="btn btn-secondary btn-sm" id="btn-stop" disabled onclick="sChrono()">⏹ Stop</button>
-            <button class="btn btn-secondary btn-sm" onclick="rChrono()">↺ Reset</button>
-          </div>
+          <div class="etape-badge etape-1">① Consigne — lisez à voix haute</div>
+          <div class="consigne-box" id="task-enonce">-</div>
+          <div id="oral-wrap"></div>
+          <div id="reponse-wrap" class="hidden"
+            style="font-size:12px;background:var(--surface2);border-radius:4px;padding:8px;
+                   font-family:var(--mono);margin-top:8px;"></div>
         </div>
 
-        <!-- Clics (reçus depuis vue participant) -->
+        <!-- ══ ÉTAPE 2 : COMMENCER / EN COURS ══ -->
         <div class="card" style="padding:14px;margin-bottom:0;">
-          <div class="section-label" style="margin-bottom:6px;">Clics (vue participant)</div>
-          <div class="click-counter">
+          <div class="etape-badge etape-2">② Tâche en cours</div>
+
+          <!-- Bouton "Commencer la tâche" -->
+          <button class="btn-commencer" id="btn-commencer" onclick="commencerTache()">
+            ▶ Commencer la tâche
+          </button>
+
+          <!-- Banner "en cours" visible après déclenchement -->
+          <div class="etat-en-cours" id="etat-en-cours">
+            ⏱ Tâche en cours — le participant travaille
+          </div>
+
+          <!-- Chrono -->
+          <div style="margin-top:12px;">
+            <div class="chrono-display" id="chrono-display">00:00.00</div>
+            <div style="display:flex;gap:6px;justify-content:center;margin-top:8px;">
+              <button class="btn btn-secondary btn-sm" id="btn-stop" disabled onclick="sChrono()">⏹ Stop</button>
+              <button class="btn btn-secondary btn-sm" id="btn-reset" onclick="rChrono()">↺ Reset</button>
+            </div>
+          </div>
+
+          <!-- Clics -->
+          <div class="click-counter" style="margin-top:12px;">
             <div>
               <div style="font-size:11px;color:var(--text-muted);">Clics participant</div>
               <div class="click-count-num" id="click-count">0</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:4px;">
-              <button class="btn btn-secondary btn-sm" onclick="resetClicsParticipant()">Reset</button>
+              <button class="btn btn-secondary btn-sm" onclick="Clics.reset()">Reset</button>
             </div>
           </div>
-          <div style="font-size:11px;color:var(--text-muted);margin-top:6px;">Les clics sont comptés automatiquement depuis l'interface affichée sur l'écran du participant.</div>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">
+            Les clics sont comptés automatiquement depuis l'interface ci-contre.
+          </p>
         </div>
 
-        <!-- Énoncé -->
-        <div class="card" style="padding:14px;margin-bottom:0;">
-          <div class="section-label" style="margin-bottom:6px;">Énoncé (lu à voix haute)</div>
-          <div style="background:var(--warning-light);border:1.5px solid #fcd34d;border-radius:var(--radius-sm);padding:12px;font-size:13px;line-height:1.6;" id="task-enonce">—</div>
-          <div id="oral-wrap"></div>
-          <div id="reponse-wrap" class="hidden" style="font-size:12px;background:var(--surface2);border-radius:4px;padding:8px;font-family:var(--mono);margin-top:8px;"></div>
-        </div>
+        <!-- ══ ÉTAPE 3 : VALIDATION ══ -->
+        <div class="card" style="padding:14px;margin-bottom:0;" id="validation-card">
+          <div class="etape-badge etape-3">③ Validation expérimentateur</div>
 
-        <!-- Validation -->
-        <div class="card" style="padding:14px;margin-bottom:0;">
-          <div class="section-label" style="margin-bottom:8px;">Validation</div>
-          <div id="validation-normale">
-            <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button class="btn btn-success" style="flex:1;font-size:15px;padding:12px;" onclick="validerTache(true)">✓ Réussie</button>
-              <button class="btn btn-danger" style="flex:1;font-size:15px;padding:12px;" onclick="validerTache(false)">✗ Échouée</button>
-            </div>
+          <!-- Zone normale (tâche) -->
+          <div id="validation-zone" class="validation-zone">
+            <button class="btn-reussie" onclick="validerTache(true)">✓ Tâche réussie</button>
+            <button class="btn-echouee" onclick="validerTache(false)">✗ Tâche échouée</button>
             <div class="form-group" style="margin-top:10px;margin-bottom:0;">
               <label style="font-size:11px;">Note (optionnel)</label>
               <textarea id="note-exp" rows="2" style="font-size:12px;" placeholder="Observations…"></textarea>
             </div>
           </div>
-          <div id="validation-attente" class="hidden">
-            <div class="q-waiting">
-              📋 <strong>En attente du participant</strong><br>
-              <span style="font-size:12px;margin-top:4px;display:block;">Le participant remplit les questionnaires sur son écran.<br>Cette vue se mettra à jour automatiquement.</span>
-            </div>
+
+          <!-- Message attente -->
+          <div id="zone-attente-val">
+            <p style="font-size:13px;color:var(--text-muted);text-align:center;">
+              Appuyez sur <strong>Commencer la tâche</strong> pour activer la validation.
+            </p>
           </div>
         </div>
 
       </div>
 
-      <!-- IFRAME (miroir de la vue participant — lecture seule) -->
+      <!-- ── Interface participant (iframe) ── -->
       <div>
         <div class="interface-frame-wrap">
           <div class="interface-frame-bar">
             <div class="frame-dot red"></div><div class="frame-dot yellow"></div><div class="frame-dot green"></div>
-            <div class="frame-url" id="frame-url">—</div>
-            <span style="font-size:10px;color:#6b7280;margin-left:auto;">(miroir — les clics sont comptés sur l'écran du participant)</span>
+            <div class="frame-url" id="frame-url">-</div>
           </div>
-          <iframe class="iface" id="interface-iframe" src="about:blank" title="Aperçu interface"></iframe>
+          <iframe class="iface" id="interface-iframe" src="about:blank" title="Interface participant"></iframe>
+        </div>
+        <!-- Zone questionnaire participant (numérique) — recouvre l'iframe -->
+        <div id="zone-participant-questionnaire" class="hidden"
+          style="background:var(--surface);border:2px solid var(--accent);border-radius:var(--radius);
+                 padding:24px;max-height:calc(100vh - 120px);overflow-y:auto;min-height:400px;">
+        </div>
+        <!-- Zone rappel papier -->
+        <div id="zone-rappel-papier" class="hidden"
+          style="background:#fef3c7;border:2px solid #fcd34d;border-radius:var(--radius);
+                 padding:32px;text-align:center;">
+          <div style="font-size:40px;margin-bottom:12px;">📋</div>
+          <div style="font-size:20px;font-weight:700;margin-bottom:8px;">Questionnaires papier</div>
+          <p style="font-size:14px;color:#92400e;margin-bottom:20px;">
+            Veuillez remettre au participant les questionnaires <strong>F-SUS</strong> et <strong>NASA-TLX</strong> papier.<br>
+            Attendez qu'il ait terminé avant de continuer.
+          </p>
+          <button class="btn btn-primary" onclick="continuerApresPapier()" style="font-size:15px;padding:12px 32px;">
+            ✓ Questionnaires remplis — Continuer →
+          </button>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- FIN -->
+  <!-- ═══════════════ FIN ═══════════════ -->
   <div id="vue-fin" class="hidden" style="max-width:600px;margin:40px auto;">
     <div class="card">
       <div class="section-label">Expérience terminée</div>
       <div class="card-title">✓ Toutes les tâches réalisées</div>
       <div class="card-subtitle" id="fin-recap"></div>
       <div class="grid2" style="margin:16px 0;">
-        <div class="stat-card"><div class="stat-val" id="fin-total">—</div><div class="stat-label">Tâches</div></div>
-        <div class="stat-card"><div class="stat-val" id="fin-ok">—</div><div class="stat-label">Réussies</div></div>
+        <div class="stat-card"><div class="stat-val" id="fin-total">-</div><div class="stat-label">Tâches</div></div>
+        <div class="stat-card"><div class="stat-val" id="fin-ok">-</div><div class="stat-label">Réussies</div></div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button class="btn btn-primary" onclick="Data.exportTaches()">⬇ Export tâches CSV</button>
         <button class="btn btn-primary" onclick="Data.exportQuestionnaires()">⬇ Export questionnaires CSV</button>
-        <button class="btn btn-secondary" onclick="window.location.href='index.html'">Nouveau participant</button>
+        <button class="btn btn-secondary" onclick="window.location.href='fin.html'">Voir récapitulatif →</button>
       </div>
     </div>
   </div>
@@ -142,10 +229,9 @@
 <script src="scripts/main.js"></script>
 <script>
   Data.load();
-  Canal.init(State.participant.code);
 
   const code = State.participant.code;
-  document.getElementById('badge-part').textContent = code || '—';
+  document.getElementById('badge-part').textContent = code || '-';
   if (code) document.getElementById('badge-part').classList.add('active');
 
   // Reconstruire séquence si besoin
@@ -157,47 +243,66 @@
   }
   const SEQ = State.sequence;
 
-  // ── Réception clics depuis vue participant ──
-  Canal.ecouter(msg => {
-    if (msg.type === 'clic_count') {
-      Clics.setCount(msg.count);
-    }
-    if (msg.type === 'questionnaires_finis') {
-      // Le participant a fini les questionnaires → passer à la tâche suivante
-      Data.load(); // recharger les questionnaires sauvegardés par la vue participant
-      const nextIdx = State.tacheIdx + 1;
-      if (nextIdx >= SEQ.length) terminer();
-      else chargerTache(nextIdx);
-    }
-  });
-
-  function resetClicsParticipant() {
-    Clics.setCount(0);
-    Canal.envoyer({ type: 'reset_clics' });
+  // ── Chrono helpers ──
+  function commencerTache() {
+    // Démarre le chrono, montre la zone de validation
+    Chrono.start();
+    document.getElementById('btn-commencer').disabled = true;
+    document.getElementById('btn-stop').disabled = false;
+    document.getElementById('etat-en-cours').classList.add('visible');
+    document.getElementById('validation-zone').classList.add('visible');
+    Utils.hide('zone-attente-val');
+    Clics.reset();
   }
 
+  function sChrono() {
+    Chrono.stop();
+    document.getElementById('btn-stop').disabled = true;
+  }
+  function rChrono() {
+    Chrono.reset();
+    document.getElementById('btn-commencer').disabled = false;
+    document.getElementById('btn-stop').disabled = true;
+    document.getElementById('etat-en-cours').classList.remove('visible');
+    document.getElementById('validation-zone').classList.remove('visible');
+    document.getElementById('zone-attente-val').innerHTML =
+      '<p style="font-size:13px;color:var(--text-muted);text-align:center;">Appuyez sur <strong>Commencer la tâche</strong> pour activer la validation.</p>';
+    Utils.show('zone-attente-val');
+  }
+
+  // ── Comptage clics dans l'iframe ──
+  document.getElementById('interface-iframe').addEventListener('load', function() {
+    try {
+      this.contentDocument.addEventListener('click', () => Clics.increment());
+    } catch(e) {} // cross-origin : silencieux
+  });
+
+  // ── Charger une tâche ──
   function chargerTache(idx) {
     State.tacheIdx = idx;
     Data.save();
     if (idx >= SEQ.length) { terminer(); return; }
 
-    const t = SEQ[idx];
+    const t    = SEQ[idx];
     const iface = t.ifaceObj;
 
+    // Topbar
     document.getElementById('badge-iface').textContent = iface.label;
     document.getElementById('badge-tache').textContent = `Tâche ${idx+1}/${SEQ.length}`;
 
+    // Info tâche
     const b = document.getElementById('iface-badge');
     b.textContent = iface.shortLabel; b.style.background = iface.couleur;
     document.getElementById('tache-prog').textContent = `${idx+1} / ${SEQ.length}`;
-    document.getElementById('tache-nom').textContent = t.label;
+    document.getElementById('tache-nom').textContent  = t.label;
     document.getElementById('tache-type').textContent = t.type === 'simple' ? '⬡ Simple' : '⬢ Complexe';
-    document.getElementById('task-enonce').textContent = t.enonce;
 
+    // Consigne
+    document.getElementById('task-enonce').textContent = t.enonce;
     const oralWrap = document.getElementById('oral-wrap');
     const repWrap  = document.getElementById('reponse-wrap');
     if (t.validation === 'oral') {
-      oralWrap.innerHTML = '<div class="oral-note">🎤 <strong>Validation orale</strong> — Écoutez la réponse du participant.</div>';
+      oralWrap.innerHTML = '<div class="oral-note">🎤 <strong>Validation orale</strong> – Écoutez la réponse du participant.</div>';
       repWrap.classList.add('hidden');
     } else {
       oralWrap.innerHTML = '';
@@ -207,32 +312,37 @@
 
     // Step dots
     document.getElementById('step-dots').innerHTML = SEQ.map((st,i) => {
-      const cls = i<idx?'step-dot done':i===idx?'step-dot current':'step-dot';
-      return `<span class="${cls}" style="display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:3px;${i===idx?'background:'+st.ifaceObj.couleur:''}"></span>`;
+      const done    = i < idx;
+      const current = i === idx;
+      const bg = current ? st.ifaceObj.couleur : done ? 'var(--success)' : 'var(--border)';
+      return `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${bg};margin-right:3px;"
+                    title="${st.label}"></span>`;
     }).join('');
 
-    // iframe (miroir)
+    // iframe
     document.getElementById('frame-url').textContent = iface.url;
-    document.getElementById('interface-iframe').src = iface.url;
+    document.getElementById('interface-iframe').src  = iface.url;
 
-    // Reset
-    Chrono.reset(); Clics.reset();
+    // Reset flux
+    Chrono.reset();
+    Clics.reset();
     document.getElementById('note-exp').value = '';
-    document.getElementById('btn-start').disabled = false;
+    document.getElementById('btn-commencer').disabled = false;
     document.getElementById('btn-stop').disabled = true;
-    Utils.show('validation-normale');
-    Utils.hide('validation-attente');
-
-    // Envoyer à la vue participant
-    Canal.envoyer({ type: 'interface', url: iface.url, label: iface.label, tache: `${idx+1}/6 — ${t.label}` });
+    document.getElementById('etat-en-cours').classList.remove('visible');
+    document.getElementById('validation-zone').classList.remove('visible');
+    // Restaurer l'iframe si questionnaire/rappel était affiché
+    document.getElementById('interface-iframe').classList.remove('hidden');
+    document.getElementById('zone-participant-questionnaire').classList.add('hidden');
+    document.getElementById('zone-rappel-papier').classList.add('hidden');
+    document.getElementById('zone-attente-val').innerHTML =
+      '<p style="font-size:13px;color:var(--text-muted);text-align:center;">Appuyez sur <strong>Commencer la tâche</strong> pour activer la validation.</p>';
+    Utils.show('zone-attente-val');
   }
 
-  function dChrono() { Chrono.start(); document.getElementById('btn-start').disabled=true; document.getElementById('btn-stop').disabled=false; }
-  function sChrono() { Chrono.stop(); document.getElementById('btn-start').disabled=false; document.getElementById('btn-stop').disabled=true; }
-  function rChrono() { Chrono.reset(); document.getElementById('btn-start').disabled=false; document.getElementById('btn-stop').disabled=true; }
-
+  // ── Valider une tâche ──
   function validerTache(reussite) {
-    if (State.chrono.running) Chrono.stop();
+    if (State.chrono.running) sChrono();
 
     const t = SEQ[State.tacheIdx];
     const tempsDecompose = Chrono.getDecompose();
@@ -240,34 +350,258 @@
 
     Data.enregistrerTache({ tache:t, tempsDecompose, clics, reussite, note: document.getElementById('note-exp').value.trim() });
 
-    const nextIdx = State.tacheIdx + 1;
-    const finInterface = (State.tacheIdx % 2 === 1); // après la tâche complexe = fin d'interface
-    const ifaceTerminee = SEQ[State.tacheIdx].ifaceObj;
+    const nextIdx      = State.tacheIdx + 1;
+    const finInterface = (State.tacheIdx % 2 === 1); // tâche complexe = fin d'interface
 
-    if (finInterface && State.participant.questionnaireMode === 'numerique') {
-      // Afficher attente côté scientifique
-      Utils.hide('validation-normale');
-      Utils.show('validation-attente');
-      // Envoyer signal à la vue participant pour qu'elle affiche les questionnaires
-      Canal.envoyer({ type: 'questionnaire_interface', ifaceId: ifaceTerminee.id });
-      // La suite se déclenchera quand la vue participant enverra 'questionnaires_finis'
+    if (finInterface) {
+      const ifaceId = SEQ[State.tacheIdx].ifaceObj.id;
+      if (State.participant.questionnaireMode === 'numerique') {
+        afficherQuestionnaireParticipant(ifaceId, nextIdx);
+      } else {
+        afficherRappelPapier(nextIdx);
+      }
     } else {
       if (nextIdx >= SEQ.length) terminer();
       else chargerTache(nextIdx);
     }
   }
 
+  // ── Rappel papier ──
+  let _rappelNextIdx = 0;
+  function afficherRappelPapier(nextIdx) {
+    _rappelNextIdx = nextIdx;
+    document.getElementById('validation-zone').classList.remove('visible');
+    Utils.hide('zone-attente-val');
+    // Côté participant : afficher rappel
+    document.getElementById('interface-iframe').classList.add('hidden');
+    document.getElementById('zone-participant-questionnaire').classList.add('hidden');
+    document.getElementById('zone-rappel-papier').classList.remove('hidden');
+    // Côté expérimentateur : message d'attente
+    document.getElementById('validation-zone').classList.remove('visible');
+    Utils.hide('zone-questionnaire');
+    Utils.show('zone-attente-val');
+    document.getElementById('zone-attente-val').innerHTML =
+      '<p style="font-size:13px;color:#92400e;text-align:center;background:#fef3c7;border:1px solid #fcd34d;border-radius:var(--radius-sm);padding:12px;">📋 En attente de la fin des questionnaires papier…</p>';
+  }
+
+  function continuerApresPapier() {
+    document.getElementById('zone-rappel-papier').classList.add('hidden');
+    document.getElementById('interface-iframe').classList.remove('hidden');
+    if (_rappelNextIdx >= SEQ.length) terminer();
+    else chargerTache(_rappelNextIdx);
+  }
+
+  // ── Questionnaire participant (numérique) — affiché côté participant ──
+  let _qNextIdx = 0;
+  function afficherQuestionnaireParticipant(ifaceId, nextIdx) {
+    _qNextIdx = nextIdx;
+    document.getElementById('validation-zone').classList.remove('visible');
+    Utils.hide('zone-attente-val');
+    Utils.hide('zone-questionnaire');
+
+    // Côté expérimentateur : message d'attente
+    document.getElementById('zone-attente-val').innerHTML =
+      '<p style="font-size:13px;color:var(--text-muted);text-align:center;background:var(--surface2);border-radius:var(--radius-sm);padding:12px;">📋 Le participant remplit les questionnaires…</p>';
+    Utils.show('zone-attente-val');
+
+    // Côté participant : afficher questionnaire plein écran
+    document.getElementById('interface-iframe').classList.add('hidden');
+    document.getElementById('zone-rappel-papier').classList.add('hidden');
+    const wrap = document.getElementById('zone-participant-questionnaire');
+    wrap.classList.remove('hidden');
+
+    // Réinitialiser (valeurs par défaut, pas d'anciennes réponses)
+    const iface = INTERFACES[ifaceId];
+    let html = `<div style="max-width:700px;margin:0 auto;">
+      <div style="font-size:18px;font-weight:700;margin-bottom:4px;color:${iface.couleur};">
+        📋 Questionnaires — Interface ${iface.label}
+      </div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">
+        Répondez à chaque question selon votre ressenti lors de l'utilisation de cette interface.
+      </p>
+
+      <div style="font-size:13px;font-weight:700;margin-bottom:12px;text-transform:uppercase;
+                  letter-spacing:.04em;padding:8px 12px;background:#dbeafe;border-radius:6px;color:#1e40af;">
+        F-SUS — Échelle d'utilisabilité (1 = Pas du tout d'accord · 5 = Tout à fait d'accord)
+      </div>`;
+
+    SUS_QUESTIONS.forEach((q,i) => {
+      html += `<div style="margin-bottom:14px;padding:12px;background:var(--surface2);border-radius:var(--radius-sm);">
+        <div style="font-size:13px;margin-bottom:8px;font-weight:500;">${i+1}. ${q}</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:11px;color:var(--text-muted);min-width:120px;">Pas du tout d'accord</span>
+          ${[1,2,3,4,5].map(v=>`
+            <label style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-weight:400;">
+              <input type="radio" name="sus_${ifaceId}_q${i+1}" value="${v}" style="accent-color:${iface.couleur};">
+              <span style="font-size:11px;">${v}</span>
+            </label>`).join('')}
+          <span style="font-size:11px;color:var(--text-muted);min-width:120px;text-align:right;">Tout à fait d'accord</span>
+        </div>
+      </div>`;
+    });
+
+    html += `<div style="margin-bottom:14px;padding:12px;background:var(--surface2);border-radius:var(--radius-sm);">
+      <div style="font-size:13px;margin-bottom:12px;font-weight:500;">Impression globale de l'interface</div>
+      <div style="display:flex;gap:0;border-radius:6px;overflow:hidden;border:1px solid var(--border);">
+        ${[
+          {v:1, label:'La pire qu\'on puisse imaginer', bg:'#dc2626', text:'#fff'},
+          {v:2, label:'Mauvaise',    bg:'#f97316', text:'#fff'},
+          {v:3, label:'Médiocre',    bg:'#eab308', text:'#fff'},
+          {v:4, label:'Acceptable',  bg:'#84cc16', text:'#fff'},
+          {v:5, label:'Bonne',       bg:'#22c55e', text:'#fff'},
+          {v:6, label:'Excellente',  bg:'#06b6d4', text:'#fff'},
+          {v:7, label:'La meilleure qu\'on puisse imaginer', bg:'#2563eb', text:'#fff'}
+        ].map(opt => `
+          <label style="flex:1;cursor:pointer;font-weight:400;">
+            <input type="radio" name="sus_${ifaceId}_global" value="${opt.v}" style="display:none;">
+            <div class="sus-adj-btn" data-iface="${ifaceId}" data-val="${opt.v}"
+              onclick="selectAdj('${ifaceId}',${opt.v})"
+              style="text-align:center;padding:8px 4px;font-size:10px;line-height:1.3;
+                     background:var(--surface);border-right:1px solid var(--border);
+                     transition:background .15s,color .15s;height:100%;min-height:60px;
+                     display:flex;align-items:center;justify-content:center;">
+              <span>${opt.label}</span>
+            </div>
+          </label>`).join('')}
+      </div>
+      <div id="sus_${ifaceId}_global_val" style="font-size:11px;color:var(--text-muted);margin-top:4px;text-align:center;">— Non sélectionné —</div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;margin:20px 0 12px;text-transform:uppercase;
+                letter-spacing:.04em;padding:8px 12px;background:#dcfce7;border-radius:6px;color:#14532d;">
+      NASA-TLX — Charge de travail sur l'interface (0 = Très faible · 20 = Très élevé)
+    </div>`;
+
+    NASA_DIMENSIONS.forEach(dim => {
+      html += `<div style="margin-bottom:14px;padding:12px;background:var(--surface2);border-radius:var(--radius-sm);">
+        <div style="font-size:13px;font-weight:600;margin-bottom:4px;">${dim.label}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">${dim.desc}</div>
+        <div class="q-scale-row">
+          <span style="font-size:11px;color:var(--text-muted);">0</span>
+          <input type="range" min="0" max="20" value="10" id="nasa_ip_${ifaceId}_${dim.id}"
+            oninput="document.getElementById('nasa_ip_${ifaceId}_v${dim.id}').textContent=this.value" style="flex:1;margin:0 8px;">
+          <span style="font-size:11px;color:var(--text-muted);">20</span>
+          <span class="val" id="nasa_ip_${ifaceId}_v${dim.id}" style="min-width:24px;text-align:center;font-weight:700;">10</span>
+        </div>
+      </div>`;
+    });
+
+    // NASA-TLX général pour les tâches (pas par tâche individuelle)
+    html += `<div style="font-size:13px;font-weight:700;margin:20px 0 12px;text-transform:uppercase;
+                letter-spacing:.04em;padding:8px 12px;background:#f3e8ff;border-radius:6px;color:#6b21a8;">
+      NASA-TLX — Charge de travail sur les tâches (0 = Très faible · 20 = Très élevé)
+    </div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;">
+      De manière générale, évaluez la charge de travail ressentie lors des tâches réalisées sur cette interface.
+    </p>`;
+
+    NASA_DIMENSIONS.forEach(dim => {
+      html += `<div style="margin-bottom:14px;padding:12px;background:var(--surface2);border-radius:var(--radius-sm);">
+        <div style="font-size:13px;font-weight:600;margin-bottom:4px;">${dim.label}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">${dim.desc}</div>
+        <div class="q-scale-row">
+          <span style="font-size:11px;color:var(--text-muted);">0</span>
+          <input type="range" min="0" max="20" value="10" id="nasa_tp_${ifaceId}_${dim.id}"
+            oninput="document.getElementById('nasa_tp_${ifaceId}_v${dim.id}').textContent=this.value" style="flex:1;margin:0 8px;">
+          <span style="font-size:11px;color:var(--text-muted);">20</span>
+          <span class="val" id="nasa_tp_${ifaceId}_v${dim.id}" style="min-width:24px;text-align:center;font-weight:700;">10</span>
+        </div>
+      </div>`;
+    });
+
+    html += `<div id="alert-q-${ifaceId}" class="hidden" style="background:#fee2e2;border:1px solid #fca5a5;
+              border-radius:var(--radius-sm);padding:10px;margin-bottom:10px;font-size:13px;color:#991b1b;">
+      ⚠ Veuillez répondre à toutes les questions F-SUS avant de valider.
+    </div>
+    <button class="btn btn-primary btn-full" style="margin-top:12px;padding:14px;font-size:15px;"
+      onclick="validerQuestionnaireParticipant('${ifaceId}')">
+      ✓ Valider et continuer →
+    </button></div>`;
+
+    wrap.innerHTML = html;
+  }
+
+  // Sélection adjectif SUS global
+  function selectAdj(ifaceId, val) {
+    const COLORS = ['','#dc2626','#f97316','#eab308','#84cc16','#22c55e','#06b6d4','#2563eb'];
+    const LABELS = ['','La pire qu\'on puisse imaginer','Mauvaise','Médiocre','Acceptable','Bonne','Excellente','La meilleure qu\'on puisse imaginer'];
+    document.querySelectorAll(`.sus-adj-btn[data-iface="${ifaceId}"]`).forEach(btn => {
+      btn.style.background = 'var(--surface)';
+      btn.style.color = 'var(--text)';
+      btn.style.fontWeight = '400';
+    });
+    const btn = document.querySelector(`.sus-adj-btn[data-iface="${ifaceId}"][data-val="${val}"]`);
+    if (btn) { btn.style.background = COLORS[val]; btn.style.color = '#fff'; btn.style.fontWeight = '700'; }
+    const lbl = document.getElementById(`sus_${ifaceId}_global_val`);
+    if (lbl) lbl.textContent = `✓ ${LABELS[val]}`;
+    const radio = document.querySelector(`input[name="sus_${ifaceId}_global"][value="${val}"]`);
+    if (radio) radio.checked = true;
+  }
+
+  function validerQuestionnaireParticipant(ifaceId) {
+    // Vérifier que toutes les questions SUS sont remplies
+    for (let i = 0; i < SUS_QUESTIONS.length; i++) {
+      const checked = document.querySelector(`input[name="sus_${ifaceId}_q${i+1}"]:checked`);
+      if (!checked) {
+        document.getElementById(`alert-q-${ifaceId}`).classList.remove('hidden');
+        return;
+      }
+    }
+    // Vérifier impression globale
+    if (!document.querySelector(`input[name="sus_${ifaceId}_global"]:checked`)) {
+      document.getElementById(`alert-q-${ifaceId}`).classList.remove('hidden');
+      document.getElementById(`alert-q-${ifaceId}`).textContent = '⚠ Veuillez répondre à toutes les questions F-SUS et choisir une impression globale.';
+      return;
+    }
+
+    // Sauvegarder SUS
+    const sus = {};
+    SUS_QUESTIONS.forEach((_,i) => {
+      sus[`q${i+1}`] = parseInt(document.querySelector(`input[name="sus_${ifaceId}_q${i+1}"]:checked`).value);
+    });
+    sus.global = parseInt(document.querySelector(`input[name="sus_${ifaceId}_global"]:checked`).value);
+    if (!State.questionnaires.sus) State.questionnaires.sus = {};
+    State.questionnaires.sus[ifaceId] = sus;
+
+    // Sauvegarder NASA-TLX interface
+    const nasa = {};
+    NASA_DIMENSIONS.forEach(dim => {
+      nasa[dim.id] = parseInt(document.getElementById(`nasa_ip_${ifaceId}_${dim.id}`).value);
+    });
+    if (!State.questionnaires.nasaTlxInterface) State.questionnaires.nasaTlxInterface = {};
+    State.questionnaires.nasaTlxInterface[ifaceId] = nasa;
+
+    // Sauvegarder NASA-TLX tâches (général, par interface)
+    const nasaT = {};
+    NASA_DIMENSIONS.forEach(dim => {
+      nasaT[dim.id] = parseInt(document.getElementById(`nasa_tp_${ifaceId}_${dim.id}`).value);
+    });
+    if (!State.questionnaires.nasaTlxTache) State.questionnaires.nasaTlxTache = {};
+    State.questionnaires.nasaTlxTache[ifaceId] = nasaT;
+
+    Data.save();
+
+    // Réafficher l'iframe et continuer
+    document.getElementById('zone-participant-questionnaire').classList.add('hidden');
+    document.getElementById('interface-iframe').classList.remove('hidden');
+    Utils.hide('zone-attente-val');
+
+    if (_qNextIdx >= SEQ.length) terminer();
+    else chargerTache(_qNextIdx);
+  }
+
+  // ── Terminer ──
   function terminer() {
     Utils.hide('vue-experience');
     Utils.show('vue-fin');
     const ok = State.donnees.filter(d=>d.reussite===1).length;
     document.getElementById('fin-total').textContent = State.donnees.length;
-    document.getElementById('fin-ok').textContent = ok;
-    document.getElementById('fin-recap').textContent = `${code} — ${State.participant.typeGroupe} ${State.participant.groupe} — ${DateFR.dateCourte()}`;
-    Canal.envoyer({ type: 'fin' });
+    document.getElementById('fin-ok').textContent    = ok;
+    document.getElementById('fin-recap').textContent =
+      `${code} – ${State.participant.typeGroupe} ${State.participant.groupe} – ${DateFR.dateCourte()}`;
   }
 
-  // Init
+  // ── Init ──
   chargerTache(State.tacheIdx || 0);
 </script>
 </body>
