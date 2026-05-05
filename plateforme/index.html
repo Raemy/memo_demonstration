@@ -29,17 +29,14 @@
 <body>
 
 <div class="topbar">
-  <span class="topbar-brand">EXP <span>/ Plateforme v5</span></span>
   <div class="topbar-info">
-    <span class="badge">v5.0</span>
     <span class="badge" id="badge-nb">0 participant(s)</span>
   </div>
 </div>
 
 <div class="hero">
   <div class="mono-tag">MÉMOIRE ERGONOMIE COGNITIVE</div>
-  <h1>Plateforme Expérimentale</h1>
-  <p>Protocole mono-poste · 1 ordinateur · Expérimentateur + Participant</p>
+  <h1>Plateforme expérimentale</h1>
 </div>
 
 <div class="container">
@@ -207,7 +204,7 @@
     Data.load();
     const codes = Data.allCodes();
     document.getElementById('badge-nb').textContent = `${codes.length} participant(s)`;
-    document.getElementById('lbl-count').textContent = `${codes.length} participant(s) — ${State.donnees.length} mesure(s)`;
+    document.getElementById('lbl-count').textContent = `${codes.length} participant(s) -${State.donnees.length} mesure(s)`;
 
     const liste = document.getElementById('liste-participants');
     if (!codes.length) { liste.innerHTML = '<p style="font-size:13px;color:var(--text-muted);">Aucun participant.</p>'; afficherPreview(); return; }
