@@ -8,7 +8,7 @@ const INTERFACES = {
 };
 
 const TACHES_DEF = {
-  S1:{ id:'S1', interface:'A', type:'simple',   label:'Trouver le numéro d\'assurance maladie', enonce:'Trouvez votre numéro d\'assurance maladie sur cette interface.', reponse:'Le numéro se trouve dans le footer (bas de page).', validation:'auto' },
+  S1:{ id:'S1', interface:'A', type:'simple',   label:'Télécharger votre attestation de droits 2026.', enonce:'Télécharger votre attestation de droits 2026 sur cette interface.', reponse:'Télécharger votre attestation de droits 2026.', validation:'oral' },
   C1:{ id:'C1', interface:'A', type:'complexe', label:'Retrouver le dernier remboursement', enonce:'Vous avez consulté plusieurs spécialistes ce mois-ci. Retrouvez les détails de votre dernier remboursement.', reponse:'8 avril 2026 - 17,50 € - médecin généraliste - taux 70% - base 25€', validation:'oral' },
   S2:{ id:'S2', interface:'B', type:'simple',   label:'Modifier l\'adresse email', enonce:'Modifiez votre adresse email.', reponse:'Bouton "Enregistrer la modification" → confirmation verte.', validation:'auto' },
   C2:{ id:'C2', interface:'B', type:'complexe', label:'Changer de médecin traitant', enonce:'Vous voulez changer de médecin traitant. Trouvez comment faire et précisez quel est le dernier bouton pour exécuter votre tâche.', reponse:'"Télécharger le formulaire Cerfa n°12485"', validation:'oral' },
