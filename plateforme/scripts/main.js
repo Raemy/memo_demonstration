@@ -17,7 +17,7 @@ const TACHES_DEF = {
 };
 
 const TACHES_ENTRAINEMENT = [
-  { id:'E1', label:'Trouver le numéro d\'assurance maladie', enonce:'Trouvez votre numéro d\'assurance maladie. Il se trouve dans le bas de la page.', reponse:'Numéro visible dans le footer.' },
+  { id:'E1', label:'Trouver le numéro d\'assurance maladie', enonce:'Trouvez votre numéro d\'assurance maladie.', reponse:'Numéro visible dans le footer.' },
   { id:'E2', label:'Se déconnecter', enonce:'Déconnectez-vous de l\'application.', reponse:'Bouton "Me déconnecter" / "Se déconnecter" en haut à droite.' },
   { id:'E3', label:'Lire les CGU', enonce:'Lisez les Conditions Générales d\'Utilisation (CGU).', reponse:'Lien CGU dans le footer.' }
 ];
